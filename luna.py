@@ -358,12 +358,12 @@ async def check_balance(_, message: Message):
     if user_id not in user_balance:
         return bot.send_message(message.chat.id, f"{user.mention} chưa khởi động bot. Vui lòng khởi động bot.")
     balance = user_balance.get(user_id, 0)
-    if message.reply_to_message:
-        await bot.send_message(message.chat.id, f"👤 Số điểm của {user.mention} là {balance:,} điểm 💰")
-        await bot.send_message(group_id2, f"👤 Số điểm của {user.mention} là {balance:,} điểm 💰")
-    else:
+    if len(message.text.split()) != 1:
         await bot.send_message(message.chat.id, f"👤 Số điểm của {from_user.mention} là {balance:,} điểm 💰")
         await bot.send_message(group_id2, f"👤 Số điểm của {from_user.mention} là {balance:,} điểm 💰")
+    else:
+        await bot.send_message(message.chat.id, f"👤 Số điểm của {user.mention} là {balance:,} điểm 💰")
+        await bot.send_message(group_id2, f"👤 Số điểm của {user.mention} là {balance:,} điểm 💰")
 
 def loai_cau(total_score):
   return "⚫️" if 11 <= total_score <= 18 else "⚪️"
