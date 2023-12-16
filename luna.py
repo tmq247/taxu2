@@ -136,10 +136,10 @@ def start_taixiu(_, message):
         grtrangthai = 1
         game_timer(message, grid, grtrangthai)
         
-    if len(mo_game) > 0 and mo_game[grid] == 2:
+    if len(mo_game) > 0 and mo_game[grid]['tthai'] == 2:
         return bot.send_message(chat_id, "Đợi 10s để mở ván mới.")
         
-    if len(mo_game) > 0 and mo_game[grid] == 1:
+    if len(mo_game) > 0 and mo_game[grid]['tthai'] == 1:
         total_bet_T = sum([user_bets[user_id]['T'] for user_id in user_bets])
         total_bet_X = sum([user_bets[user_id]['X'] for user_id in user_bets])
         nut = [
@@ -167,8 +167,8 @@ def start_taixiu(_, message):
         mo_game.clear()
 
 def game_timer(message, grid, grtrangthai):
-    mo_game[grid] = {0}  # Initialize the user's bets if not already present
-    mo_game[grid] += grtrangthai
+    mo_game[grid] = {'tthai': 0}  # Initialize the user's bets if not already present
+    mo_game[grid]['tthai'] += grtrangthai
     print(mo_game,1)
     nut = [
         [
@@ -277,7 +277,7 @@ def start_game(message, grid):
     load_balance_from_file()
     grtrangthai2 = 1
     print(mo_game,2)
-    mo_game[grid] += grtrangthai2
+    mo_game[grid]['tthai'] += grtrangthai2
     print(mo_game,3)
     soicau = [
         [
