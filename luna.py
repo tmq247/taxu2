@@ -490,7 +490,7 @@ def top_diem(_, message):
     #chat_id = message.chat.id
 
     with open("id.txt", "r") as f:
-        lines = f.read().splitlines()#[-1:-11:-1]
+        lines = f.read().split()#[-1:-11:-1]
         top = f"Top 10 điểm cao nhất:\n"
         for line in lines:
             user_id, balance_str = line.split()
