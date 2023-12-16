@@ -276,6 +276,7 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
 def start_game(message, grid):
     load_balance_from_file()
     grtrangthai2 = 1
+    print(mo_game)
     mo_game[grid]['trangthai'] += grtrangthai2
     soicau = [
         [
