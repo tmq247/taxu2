@@ -303,7 +303,7 @@ async def update_balance(diem, user_id, message):
   #if len(user_input) != 3:
       #return await message.reply_text("⏲Nhập id và số điểm muốn cộng hoặc trừ🪤 \n🚬(ví dụ: /cdiem 12345 +1000 hoặc /cdiem 12345 -1000)🎚")
       
-  if user_id in user_balance and diem.isdigit():
+  if user_id in user_balance :#and diem.isdigit():
     balance_change = int(diem)
     current_balance = user_balance.get(user_id, 0)
     new_balance = current_balance + balance_change
