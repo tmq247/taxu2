@@ -177,17 +177,17 @@ def game_timer(message, grid, grtrangthai):
         ],]
     reply_markup = InlineKeyboardMarkup(nut)
     text1 = bot.send_message(group_id, "Bắt đầu ván mới! Có 90 giây để đặt cược\n LƯU Ý : HÃY VÀO 2 BOT BÊN DƯỚI, KHỞI ĐỘNG BOT ĐỂ CÓ THỂ CHƠI GAME.", reply_markup=reply_markup)
-    time.sleep(10)
+    time.sleep(30)
     text2 = bot.send_message(group_id, "Còn 60s để đặt cược.")
     
-    time.sleep(5)  # Wait for 120 seconds
-    text3 = bot.send_message(group_id, "Còn 30s để đặt cược.")
+    time.sleep(20)  # Wait for 120 seconds
+    text3 = bot.send_message(group_id, "Còn 40s để đặt cược.")
     bot.delete_messages(grid, text2.id)
 
-    time.sleep(5)  # Wait for 120 seconds
+    time.sleep(30)  # Wait for 120 seconds
     text4 = bot.send_message(group_id, "Còn 10s để đặt cược.")
     bot.delete_messages(grid, text3.id)
-    time.sleep(5)  # Wait for 120 seconds
+    time.sleep(10)  # Wait for 120 seconds
     
     bot.delete_messages(grid, text1.id)
     bot.delete_messages(grid, text4.id)
@@ -339,7 +339,7 @@ Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
     winner.clear()
     mo_game.clear()
     luu_cau.clear()
-    time.sleep(3)
+    time.sleep(10)
     bot.delete_messages(group_id, idtext4)
 
 @bot.on_message(filters.command("diem"))
