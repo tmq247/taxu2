@@ -28,7 +28,7 @@ from telebot.util import quick_markup
 import telebot
 #from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
 from telebot import TeleBot, types
-
+from config import bot_token, bot_token2, group_id, group_id2, channel_id
 
 is_config = os.path.exists("config.py")
 
@@ -48,31 +48,19 @@ bot_id = int(bot_token.split(":")[0])
 
 ###############
 luu_cau = {}
-#cau = {}
 mo_game = {}
 grtrangthai = {}
 
 # Dictionary to store user bets
 user_bets = {}
 winner = {}
-winner2 = {}
 
 # Dictionary to store user balances
 user_balance = {}
 
-# Variable to store the group chat ID
-group_chat_id = -1001712715936
-group_chat_id2 = -1002001597187
-channel_id = -1002067584440
-
-# Winning coefficient
-winning_coefficient = 1.95
-
 #########################
-# Tạo từ điển gitcodes
-used_gitcodes = []
+
 grid_trangthai = {}
-user_pending_gitcodes = {}
 
 # Add these variables for Gitcode handling
 grid_FILE = "grid.txt"
@@ -105,24 +93,6 @@ def xoa_grid(grid):
                 f.write(line)
 
 
-
-#######################################################
-
-
-# Function to send a dice and get its value
-def send_dice(chat_id):
-    response = requests.get(f'https://api.telegram.org/bot{bot_token}/sendDice?chat_id={chat_id}')
-    if response.status_code == 200:
-        data = response.json()
-        if 'result' in data and 'dice' in data['result']:
-            return data['result']['dice']['value']
-    return None
-
-
-# Hàm kiểm Tài/Xỉu
-def calculate_tai_xiu(total_score):
-  return "⚫️Tài" if 11 <= total_score <= 18 else "⚪️Xỉu"
-
 # Hàm để lưu tất cả số dư vào tệp văn bản
 def save_balance_to_file():
     with open("id.txt", "w") as f:
@@ -140,182 +110,106 @@ def load_balance_from_file():
                     balance = int(balance)
                 user_balance[int(user_id)] = balance
 
+#######################################################
 
 
-admin_user_id = 6337933296 or 6630692765 or 5838967403 or 6050066066
-
-
-
-# Function to confirm the bet and check user balance
-def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
-    load_balance_from_file()
-    mention =  bot.get_users(user_id).mention
-    user_id = message.from_user.id
-    if bet_type == 'T':
-        cua_cuoc = '⚫️Tài'
-    else:
-        cua_cuoc = '⚪️Xỉu'
-    diemcuoc = f"{ten_ncuoc} đã cược {cua_cuoc} {bet_amount:,} điểm."
+# Function to send a dice and get its value
+def send_dice(chat_id):
+    response = requests.get(f'https://api.telegram.org/bot{bot_token}/sendDice?chat_id={chat_id}')
+    if response.status_code == 200:
+        data = response.json()
+        if 'result' in data and 'dice' in data['result']:
+            return data['result']['dice']['value']
+    return None
     
-    #time.sleep(3)
-    #await diemcuoc.delete()
-    
-    # Check if the user_id is present in user_balance dictionary
-    if user_id in user_balance:
-        # Check user balance
-        if user_balance[user_id] >= bet_amount:
-            
-            if user_id in user_bets:
-                user_bets[user_id][bet_type] += bet_amount  
-            else:
-                user_bets[user_id] = {'T': 0, 'X': 0}  # Initialize the user's bets if not already present
-                user_bets[user_id][bet_type] += bet_amount
-            user_balance[user_id] -= bet_amount
-            text = f"""{diemcuoc} \nCược đã được chấp nhận."""
-            balance = user_balance.get(user_id, 0)
-            text += f"{ten_ncuoc} còn {balance:,} điểm"
-            request_message = f"""{diemcuoc} \nCược đã được chấp nhận."""
-            another_bot_token = "6893240216:AAE6Kzjp2z9OZgYZwpsquWYM9mNg6Q4GtL8"
-            requests.get(f"https://api.telegram.org/bot{another_bot_token}/sendMessage?chat_id={user_id}&text={request_message}")
-            requests.get(f"https://api.telegram.org/bot{another_bot_token}/sendMessage?chat_id={group_chat_id2}&text={text}")
-            bot.send_message(group_chat_id, request_message)
-            save_balance_to_file()
-            load_balance_from_file()
-        else:
-            bot.send_message(group_chat_id, "Không đủ số dư để đặt cược. Vui lòng kiểm tra lại số dư của bạn.")
-    else:
-        soicau = [
+# Hàm kiểm Tài/Xỉu
+def calculate_tai_xiu(total_score):
+  return "⚫️Tài" if 11 <= total_score <= 18 else "⚪️Xỉu"
+
+@bot.on_message(filters.command("tx"))
+def start_taixiu(_, message):
+    chat_id = message.chat.id
+    grid = chat_id
+    if chat_id != group_id:
+        return bot.send_message(chat_id, "Vào nhóm t.me/sanhallwin để chơi GAME.")
+        
+    if len(mo_game) > 0 and mo_game[grid]['trangthai'] == 2:
+        return bot.send_message(chat_id, "Đợi 10s để mở ván mới.")
+        
+    if len(mo_game) > 0 and mo_game[grid]['trangthai'] == 1:
+        total_bet_T = sum([user_bets[user_id]['T'] for user_id in user_bets])
+        total_bet_X = sum([user_bets[user_id]['X'] for user_id in user_bets])
+        nut = [
         [
             InlineKeyboardButton("Bot GAME", url="https://t.me/alltowin_bot"),
             InlineKeyboardButton(" Bot Nạp - Rút", url="https://t.me/diemallwin_bot"),
-        ],]
-        reply_markup = InlineKeyboardMarkup(soicau)
-        bot.send_message(group_chat_id, f"Người chơi chưa khởi động bot, vui lòng khởi động bot và thử lại. \nHÃY VÀO 2 BOT BÊN DƯỚI, KHỞI ĐỘNG BOT ĐỂ CÓ THỂ CHƠI GAME.", reply_markup=reply_markup)
-    # Load user balances from the file
-
-# Function to start the dice game
-def start_game(message, grid):
-    load_balance_from_file()
-    soicau = [
+        ],
+            [InlineKeyboardButton("Vào nhóm để chơi GAME", url="https://t.me/sanhallwin"),],]
+        reply_markup = InlineKeyboardMarkup(nut)
+        bot.send_message(chat_id, f"Đang đợi đổ xúc xắc\n LƯU Ý : HÃY VÀO 2 BOT BÊN DƯỚI, KHỞI ĐỘNG BOT ĐỂ CÓ THỂ CHƠI GAME.", reply_markup=reply_markup)
+        nut2 = [
         [
             InlineKeyboardButton("Soi cầu", url="https://t.me/kqtaixiu"),
             InlineKeyboardButton("Nạp - Rút", url="https://t.me/diemallwin_bot"),
         ],]
-    reply_markup = InlineKeyboardMarkup(soicau)
-    total_bet_T = sum([user_bets[user_id]['T'] for user_id in user_bets])
-    total_bet_X = sum([user_bets[user_id]['X'] for user_id in user_bets])
-    text = f"""
+        reply_markup2 = InlineKeyboardMarkup(nut2)
+        bot.send_message(group_id, f"""
 ┏ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━
 ┣➤⚫️Tổng cược bên TÀI: {total_bet_T:,}đ
 ┣➤⚪️Tổng cược bên XỈU: {total_bet_X:,}đ
-┗ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n
-"""
-    grtrangthai = 1
-    mo_game[grid]['trangthai'] += grtrangthai
-    text += "Hết thời gian cược. Kết quả sẽ được công bố ngay sau đây.\n 💥 Bắt đầu tung XX 💥"
-    text4 = bot.send_message(group_chat_id, text)
-    idtext4 = text4.id
-    time.sleep(3)  # Simulating dice rolling
-    
-    result = [send_dice(group_chat_id) for _ in range(3)]
-    total_score = sum(result)
-    bot.send_message(channel_id, f"➤KẾT QUẢ XX: {' + '.join(str(x) for x in result)} = {total_score} điểm {calculate_tai_xiu(total_score)}")
-    kq1 = f"➤KẾT QUẢ XX: {' + '.join(str(x) for x in result)} = {total_score} điểm {calculate_tai_xiu(total_score)}\n"
-    kq = f"➤KẾT QUẢ XX: {' + '.join(str(x) for x in result)} = {total_score} điểm {calculate_tai_xiu(total_score)}\n"
-    ls_cau(result)
-    
-    # Determine the winner and calculate total winnings
-    tien_thang = 0
-    total_win = 0
-    for user_id in user_bets:
-        if sum(result) >= 11 and user_bets[user_id]['T'] > 0:
-            total_win += int(user_bets[user_id]['T'] * winning_coefficient)
-            winner[user_id] = []
-            winner[user_id] += [int(user_bets[user_id]['T'] * winning_coefficient)] 
-            tien_thang = int(user_bets[user_id]['T'] * winning_coefficient)
-            user_balance[user_id] += tien_thang
+┗ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━
+""", reply_markup=reply_markup2)
 
-        elif sum(result) < 11 and user_bets[user_id]['X'] > 0:
-            total_win += int(user_bets[user_id]['X'] * winning_coefficient)
-            winner[user_id] = []
-            winner[user_id] += [int(user_bets[user_id]['X'] * winning_coefficient)]
-            tien_thang = int(user_bets[user_id]['X'] * winning_coefficient)
-            user_balance[user_id] += tien_thang
+    if len(mo_game) == 0:
+        grtrangthai = 1
+        game_timer(message, grid, grtrangthai)
 
-    for user_id, diem in winner.items():
-        user_ids =  bot.get_users(user_id)
-        #user_id = message.from_user.id
-        #user_id1 = message.from_user.first_name
-        diem = diem[0]
-        kq += f"""{user_ids.mention} thắng {diem:,} điểm.\n"""
-        kq1 += f"""{user_ids.first_name} thắng {diem:,} điểm.\n"""
-        #kq1 += f"{user_id1} có {balance:,} điểm"
-        another_bot_token = "6893240216:AAE6Kzjp2z9OZgYZwpsquWYM9mNg6Q4GtL8"
-        requests.get(f"https://api.telegram.org/bot{another_bot_token}/sendMessage?chat_id={user_id}&text={kq1}")
-        
-    kq += f"""
-Tổng thắng: {total_win:,}đ
-Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
-    """  
-    user_bets.clear()
-    save_balance_to_file()
-    load_balance_from_file()
-    bot.send_message(group_chat_id, kq, reply_markup=reply_markup)
-    bot.send_message(group_chat_id2, kq)
-    winner.clear()
-    print(mo_game,4)
-    mo_game.clear()
-    print(mo_game)
-    luu_cau.clear()
-    bot.delete_messages(group_chat_id, idtext4)
-    
-# Function to handle the game timing
+    else: 
+        mo_game.clear()
+
 def game_timer(message, grid, grtrangthai):
     mo_game[grid] = {'trangthai': 0}  # Initialize the user's bets if not already present
     mo_game[grid]['trangthai'] += grtrangthai
-    soicau = [
+    nut = [
         [
             InlineKeyboardButton("Bot Nạp - Rút", url="https://t.me/diemallwin_bot"),
             InlineKeyboardButton("Bot GAME", url="https://t.me/alltowin_bot"),
         ],]
-    reply_markup = InlineKeyboardMarkup(soicau)
-    text1 = bot.send_message(group_chat_id, "Bắt đầu ván mới! Có 60 giây để đặt cược\n LƯU Ý : HÃY VÀO 2 BOT BÊN DƯỚI, KHỞI ĐỘNG BOT ĐỂ CÓ THỂ CHƠI GAME.", reply_markup=reply_markup)
-    time.sleep(15)
-    text2 = bot.send_message(group_chat_id, "Còn 45s để đặt cược.")
+    reply_markup = InlineKeyboardMarkup(nut)
+    text1 = bot.send_message(group_id, "Bắt đầu ván mới! Có 90 giây để đặt cược\n LƯU Ý : HÃY VÀO 2 BOT BÊN DƯỚI, KHỞI ĐỘNG BOT ĐỂ CÓ THỂ CHƠI GAME.", reply_markup=reply_markup)
+    time.sleep(10)
+    text2 = bot.send_message(group_id, "Còn 60s để đặt cược.")
     
-    time.sleep(15)  # Wait for 120 seconds
-    text3 = bot.send_message(group_chat_id, "Còn 30s để đặt cược.")
+    time.sleep(5)  # Wait for 120 seconds
+    text3 = bot.send_message(group_id, "Còn 30s để đặt cược.")
     bot.delete_messages(grid, text2.id)
 
-    time.sleep(20)  # Wait for 120 seconds
-    text4 = bot.send_message(group_chat_id, "Còn 10s để đặt cược.")
+    time.sleep(5)  # Wait for 120 seconds
+    text4 = bot.send_message(group_id, "Còn 10s để đặt cược.")
     bot.delete_messages(grid, text3.id)
-    time.sleep(10)  # Wait for 120 seconds
+    time.sleep(5)  # Wait for 120 seconds
     
     bot.delete_messages(grid, text1.id)
     bot.delete_messages(grid, text4.id)
     start_game(message, grid)
-        
 
-# Function to handle user messages
 @bot.on_message(filters.command(["t", "x"]) & filters.text)
 def handle_message(_, message: Message):
     load_balance_from_file()
     chat_id = message.chat.id
     from_user = message.from_user.id
     grid = chat_id
-    print(mo_game, 3)
     if from_user not in user_balance:
         return bot.send_message(chat_id, "Vui lòng khởi động bot để chơi game.")
     if len(mo_game) > 0 and mo_game[grid]['trangthai'] == 2:
         return bot.send_message(chat_id, "Đợi 10s để đặt cược ván tiếp theo.")
     
     # Check if the message is from the group chat
-    if chat_id == group_chat_id:
+    if chat_id == group_id:
         # Check if the message is a valid bet
         if message.text and message.text.upper() in ['/T ALL', '/X ALL'] or (message.text and message.text.upper()[1] in ['T', 'X'] and message.text[3:].isdigit()): 
             user_id = message.from_user.id
-            ten_ncuoc = message.from_user.mention#first_name
+            ten_ncuoc = message.from_user#.mention#first_name
             bet_type = message.text.upper()[1]
             if message.text.upper() == '/T ALL' or message.text.upper() == '/X ALL':
                 bet_amount = user_balance.get(user_id, 0)  # Use the entire balance
@@ -324,18 +218,129 @@ def handle_message(_, message: Message):
             # Confirm the bet and check user balance
             confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message)
             if len(mo_game) == 0:
-                    print(mo_game, 2)
-                    grtrangthai = 1
-                    game_timer(message, grid, grtrangthai)
+                grtrangthai = 1
+                grid = chat_id
+                game_timer(message, grid, grtrangthai)
         else:
             bot.send_message(chat_id, "Lệnh không hợp lệ. Vui lòng tuân thủ theo quy tắc cược.")
 
     else:
-        bot.send_message(chat_id, "Vào nhóm để chơi GAME : t.me/sanhallwin")
+        bot.send_message(chat_id, "Vào nhóm để chơi GAME : t.me/sanhallwin")      
 
+# Function to confirm the bet and check user balance
+def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
+    load_balance_from_file()
+    #mention =  bot.get_users(user_id).mention
+    user_id = message.from_user.id
+    if bet_type == 'T':
+        cua_cuoc = '⚫️Tài'
+    else:
+        cua_cuoc = '⚪️Xỉu'
+    diemcuoc = f"{ten_ncuoc.mention} đã cược {cua_cuoc} {bet_amount:,} điểm."
+    
+    # Check if the user_id is present in user_balance dictionary
+    if user_id in user_balance:
+        # Check user balance
+        if user_balance[user_id] >= bet_amount:
+            if user_id in user_bets:
+                user_bets[user_id][bet_type] += bet_amount  
+            else:
+                user_bets[user_id] = {'T': 0, 'X': 0}  # Initialize the user's bets if not already present
+                user_bets[user_id][bet_type] += bet_amount
+            user_balance[user_id] -= bet_amount
+            text = f"""{diemcuoc} \nCược đã được chấp nhận."""
+            balance = user_balance.get(user_id, 0)
+            text += f"Còn {balance:,} điểm"
+            request_message = f"""{diemcuoc} \nCược đã được chấp nhận."""
+            requests.get(f"https://api.telegram.org/bot{bot_token2}/sendMessage?chat_id={user_id}&text={request_message}")
+            #requests.get(f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={group_id2}&text={text}")
+            bot.send_message(group_id, request_message)
+            save_balance_to_file()
+            bot.send_message(group_id2, text)
+        else:
+            bot.send_message(group_id, "Không đủ số dư để đặt cược. Vui lòng kiểm tra lại số dư của bạn.")
+    else:
+        soicau = [
+        [
+            InlineKeyboardButton("Bot GAME", url="https://t.me/alltowin_bot"),
+            InlineKeyboardButton(" Bot Nạp - Rút", url="https://t.me/diemallwin_bot"),
+        ],]
+        reply_markup = InlineKeyboardMarkup(soicau)
+        bot.send_message(group_id, f"Người chơi chưa khởi động bot, vui lòng khởi động bot và thử lại. \nHÃY VÀO 2 BOT BÊN DƯỚI, KHỞI ĐỘNG BOT ĐỂ CÓ THỂ CHƠI GAME.", reply_markup=reply_markup)
 
-# Load user balances from the file
-load_balance_from_file()
+# Function to start the dice game
+def start_game(message, grid):
+    load_balance_from_file()
+    grtrangthai = 1
+    mo_game[grid]['trangthai'] += grtrangthai
+    soicau = [
+        [
+            InlineKeyboardButton("Soi cầu", url="https://t.me/kqtaixiu"),
+            InlineKeyboardButton("Nạp - Rút", url="https://t.me/diemallwin_bot"),
+        ],]
+    reply_markup = InlineKeyboardMarkup(soicau)
+    total_bet_T = sum([user_bets[user_id]['T'] for user_id in user_bets])
+    total_bet_X = sum([user_bets[user_id]['X'] for user_id in user_bets])
+    text = "Hết thời gian cược. Kết quả sẽ được công bố ngay sau đây.\n 💥 Bắt đầu tung XX 💥"
+    text += f"""
+┏ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━
+┣➤⚫️Tổng cược bên TÀI: {total_bet_T:,}đ
+┣➤⚪️Tổng cược bên XỈU: {total_bet_X:,}đ
+┗ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━\n
+"""
+    text4 = bot.send_message(group_id, text)
+    idtext4 = text4.id
+    time.sleep(3)  # Simulating dice rolling
+    
+    result = [send_dice(group_id) for _ in range(3)]
+    total_score = sum(result)
+    kq = f"➤KẾT QUẢ XX: {' + '.join(str(x) for x in result)} = {total_score} điểm {calculate_tai_xiu(total_score)}\n"
+    kq1 = f"➤KẾT QUẢ XX: {' + '.join(str(x) for x in result)} = {total_score} điểm {calculate_tai_xiu(total_score)}\n"
+    ls_cau(result)
+    bot.send_message(channel_id, kq)
+    # Determine the winner and calculate total winnings
+    tien_thang = 0
+    total_win = 0
+    for user_id in user_bets:
+        if sum(result) >= 11 and user_bets[user_id]['T'] > 0:
+            total_win += int(user_bets[user_id]['T'] * tile_thang)
+            winner[user_id] = []
+            winner[user_id] += [int(user_bets[user_id]['T'] * tile_thang)] 
+            tien_thang = int(user_bets[user_id]['T'] * tile_thang)
+            user_balance[user_id] += tien_thang
+
+        elif sum(result) < 11 and user_bets[user_id]['X'] > 0:
+            total_win += int(user_bets[user_id]['X'] * tile_thang)
+            winner[user_id] = []
+            winner[user_id] += [int(user_bets[user_id]['X'] * tile_thang)]
+            tien_thang = int(user_bets[user_id]['X'] * tile_thang)
+            user_balance[user_id] += tien_thang
+            
+    balance = user_balance.get(user_id, 0)
+    for user_id, diem in winner.items():
+        user_ids = bot.get_users(user_id)
+        user_id1 = message.from_user.id
+        #user_id2 = message.from_user.first_name
+        diem = diem[0]
+        kq += f"""{user_ids.mention} thắng {diem:,} điểm.\n"""
+        kq1 += f"""{user_ids.mention} thắng {diem:,} điểm.Có {balance:,} điểm\n"""
+        #kq1 += f"{user_id1} có {balance:,} điểm"
+        #requests.get(f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={user_id}&text={kq1}")
+        bot.send_message(group_id, kq)
+        
+    kq += f"""
+Tổng thắng: {total_win:,}đ
+Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
+    """  
+    bot.send_message(group_id, kq, reply_markup=reply_markup)
+    bot.send_message(group_id2, kq1)
+    save_balance_to_file()
+    user_bets.clear()
+    winner.clear()
+    mo_game.clear()
+    luu_cau.clear()
+    time.sleep(3)
+    bot.delete_messages(group_id, idtext4)
 
 @bot.on_message(filters.command("diem"))
 async def check_balance(_, message):
@@ -354,59 +359,14 @@ async def check_balance(_, message):
         balance = user_balance.get(user_id, 0)
         mention = (await bot.get_users(user_id)).mention
         if user_id not in user_balance:
-            return bot.send_message(message.chat.id, f"{user_id1} chưa khởi động bot. Vui lòng khởi động bot.")
+            return await bot.send_message(message.chat.id, f"{user_id1} chưa khởi động bot. Vui lòng khởi động bot.")
         await bot.send_message(message.chat.id, f"👤 Số điểm của {message.from_user.mention} là {balance:,} điểm 💰")
         request_message = f"""👤 Số điểm của {user_id1} là {balance:,} điểm 💰."""
-        another_bot_token = "6893240216:AAE6Kzjp2z9OZgYZwpsquWYM9mNg6Q4GtL8"
-        requests.get(f"https://api.telegram.org/bot{another_bot_token}/sendMessage?chat_id={group_chat_id2}&text={request_message}")
-
-
-@bot.on_message(filters.command("tx"))
-def start_taixiu(_, message):
-    grtrangthai = int('1')
-    chat_id = message.chat.id
-    grid = chat_id
-    if chat_id != group_chat_id:
-        return bot.send_message(chat_id, "Vào nhóm để chơi GAME : t.me/sanhallwin")
-    if len(mo_game) > 0 and mo_game[grid]['trangthai'] == 2:
-        return bot.send_message(chat_id, "Đợi 10s để mở ván mới.")
-    if len(mo_game) == 0:
-        grtrangthai = 1
-        grid = chat_id
-        game_timer(message, grid, grtrangthai)
-    if len(mo_game) > 0 and mo_game[grid]['trangthai'] == 1:
-        total_bet_T = sum([user_bets[user_id]['T'] for user_id in user_bets])
-        total_bet_X = sum([user_bets[user_id]['X'] for user_id in user_bets])
-        soicau = [
-        [
-            InlineKeyboardButton("Bot GAME", url="https://t.me/alltowin_bot"),
-            InlineKeyboardButton(" Bot Nạp - Rút", url="https://t.me/diemallwin_bot"),
-        ],
-            [InlineKeyboardButton("Vào nhóm để chơi GAME", url="https://t.me/sanhallwin"),],]
-        reply_markup = InlineKeyboardMarkup(soicau)
-        bot.send_message(chat_id, f"Đang đợi đổ xúc xắc\n LƯU Ý : HÃY VÀO 2 BOT BÊN DƯỚI, KHỞI ĐỘNG BOT ĐỂ CÓ THỂ CHƠI GAME.", reply_markup=reply_markup)
-        soicau1 = [
-        [
-            InlineKeyboardButton("Soi cầu", url="https://t.me/kqtaixiu"),
-            InlineKeyboardButton("Nạp - Rút", url="https://t.me/diemallwin_bot"),
-        ],]
-        reply_markup1 = InlineKeyboardMarkup(soicau1)
-        bot.send_message(group_chat_id, f"""
-┏ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━
-┣➤⚫️Tổng cược bên TÀI: {total_bet_T:,}đ
-┣➤⚪️Tổng cược bên XỈU: {total_bet_X:,}đ
-┗ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━
-""", reply_markup=reply_markup1)
-
-    else: 
-        mo_game.clear()
-
-
+        requests.get(f"https://api.telegram.org/bot{bot_token2}/sendMessage?chat_id={group_id2}&text={request_message}")
 
 def loai_cau(total_score):
   return "⚫️" if 11 <= total_score <= 18 else "⚪️"
     
-
 def ls_cau(result):
     total_score = sum(result)
     cau = loai_cau(total_score)
@@ -439,16 +399,6 @@ def soicau_taixiu(_, message):
             cau2 = "".join(reversed(cau1))
             scau += f"""{cau2}<-"""
         bot.send_message(chat_id, scau, reply_markup=reply_markup)
-        
-def soi_cau():
-    soicau = [
-        [
-            InlineKeyboardButton("Soi cầu", url="https://t.me/kqtaixiu"),
-            InlineKeyboardButton("Nạp - Rút", url="https://t.me/diemallwin_bot"),
-        ],]
-    reply_markup = InlineKeyboardMarkup(soicau)
-
-
 
 @bot.on_message(filters.command("start"))
 def show_main_menu(_, message):
@@ -459,7 +409,7 @@ def show_main_menu(_, message):
     if user_id not in user_balance:
         user_balance[user_id] = 0  # Set initial balance to 0 for new users
         save_balance_to_file()  # Save user balances to the text file
-    soicau = [
+    nut = [
         [
             InlineKeyboardButton("Soi cầu", url="https://t.me/kqtaixiu"),
             InlineKeyboardButton("Bot Nạp - Rút", url="https://t.me/diemallwin_bot"),
@@ -468,17 +418,7 @@ def show_main_menu(_, message):
             InlineKeyboardButton("Bot GAME", url="https://t.me/alltowin_bot"),
             InlineKeyboardButton("Vào nhóm để chơi GAME", url="https://t.me/sanhallwin"),
         ],]
-    reply_markup = InlineKeyboardMarkup(soicau)
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    rows = [
-      ["👤 Điểm", "🎲 Soi cầu"],
-      ["💸 Rút Điểm", "💵 Nạp Điểm"],
-      ["📈 Lịch Sử Rút", "📊 Lịch Sử Nạp"],
-      ["📤Tặng Điểm📪", "🫧Nhập CODE💶"],
-  ]
-    for row in rows:
-        markup.row(*[types.KeyboardButton(button_text) for button_text in row])
-
+    reply_markup = InlineKeyboardMarkup(nut)
   # Send a message with a photo link
     photo_url = "https://github.com/tmq247/taxu2/blob/main/photo_2023-12-14_21-31-58.jpg?raw=true"
     caption = """
@@ -503,49 +443,7 @@ def show_main_menu(_, message):
     bot.send_photo(message.chat.id,
                  photo_url,
                  caption=caption,
-                 reply_markup=reply_markup,
-)
-    
-
-
-# Hàm xử lý khi người dùng chọn nút
-#@bot.message_handler(func=lambda message: message.text == "👤 Điểm")
-#@bot.message_handler(commands=["diem"])
-#def handle_check_balance_button(msg):
-  #load_balance_from_file()
-  #check_balance(msg)
-
-#@bot.message_handler(func=lambda message: message.text == "💸 Rút Điểm")
-#def handle_withdraw_balance_button(msg):
-  #withdraw_balance(msg)
-
-#@bot.message_handler(func=lambda message: message.text == "🎲 Soi cầu")
-#def handle_game_list_button(msg):
-  #show_game_options(msg)
-
-#@bot.message_handler(func=lambda message: message.text == "💵 Nạp Điểm")
-#def handle_deposit_button(msg):
-  #napwithdraw_balance(msg)
-
-#@bot.message_handler(func=lambda message: message.text == "📈 Lịch Sử Rút")
-#def handle_bet_history_button(msg):
-  #show_withdraw_history(msg)
-
-#@bot.message_handler(func=lambda message: message.text == "📊 Lịch Sử Nạp")
-#def handle_withdraw_history_button(msg):
-  #napshow_withdraw_history(msg)
-
-#@bot.message_handler(func=lambda message: message.text == "📤Tặng Điểm📪")
-#def handle_chuyentien_money_button(msg):
-    #chuyentien_money(msg)
-
-#@bot.message_handler(func=lambda message: message.text == "🫧Nhập CODE💶")
-#def handle_naptien_gitcode_button(msg):
-    #naptien_gitcode(msg)
-
-#def show_game_options(msg):
-   #bot.send_message(msg.chat.id, "Vào @kqtaixiu để xem lịch sử cầu")
-##########################
+                 reply_markup=reply_markup)
 
 @bot.on_message(filters.command("hdan"))
 def soicau_taixiu(_, message):
@@ -569,12 +467,9 @@ def soicau_taixiu(_, message):
     #chat_id = message.chat.id
     with open("id.txt", "r") as f:
         a = f.read()
-        
-        bot.send_message(group_chat_id2, f"{a}")
-
+        bot.send_message(group_id2, f"{a}")
+######################################################
 async def main():
-
-
     await bot.start()
     print(
         """
