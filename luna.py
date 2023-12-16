@@ -495,7 +495,7 @@ def top_diem(_, message):
         if balance.is_integer():
           balance = int(balance.sort(reverse=True))
         topdiem[int(user_id)] = balance
-     bot.send_message(group_id2, f"{topdiem}")
+      bot.send_message(group_id2, f"{topdiem}")
 ######################################################
 async def main():
     await bot.start()
