@@ -49,7 +49,7 @@ bot_id = int(bot_token.split(":")[0])
 ###############
 luu_cau = {}
 mo_game = {}
-topdiem = {}
+topdiem = []
 
 # Dictionary to store user bets
 user_bets = {}
