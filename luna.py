@@ -348,7 +348,7 @@ Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
     bot.delete_messages(group_id, idtext4)
 
 @bot.on_message(filters.command("diem"))
-async def check_balance(_, message):
+async def check_balance(_, message: Message):
     load_balance_from_file()
     if message.reply_to_message:
         user_id = await extract_user(message)
@@ -357,6 +357,8 @@ async def check_balance(_, message):
         balance = user_balance.get(user_id, 0)
         mention = (await bot.get_users(user_id)).mention
         await bot.send_message(message.chat.id, f"👤 Số điểm của {mention} là {balance:,} điểm 💰")
+
+    elif 
 
     else:
         user_id1 = message.from_user.first_name
