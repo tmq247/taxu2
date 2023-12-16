@@ -226,8 +226,6 @@ Cách 2:Trả lời người muốn tặng điểm rồi nhập /id để lấy 
 VD: /tangdiem 987654321 10000.
 Phí tặng điểm là 5%."""
     load_balance_from_file()
-    print(message.text[3:])
-    print(message.text[2:])
     if len(message.text.split()) != 3 or len(message.text.split()) != 2 :
         if len(message.text.split()) == 3:
             #lenh, user_id1, amount = message.text.split(" ", 3)
@@ -277,12 +275,14 @@ Phí tặng điểm là 5%."""
 @bot.on_message(filters.command("cdiem"))
 async def set_balance(_, message):
   load_balance_from_file()
+  user_id, diem = await extract_user_and_reason(message)
+  user = await bot.get_users(user_id)
   from_user = message.from_user.id
   if from_user not in admin:
       return await message.reply_text("Bạn không có quyền sử dụng lệnh này.")
   if len(message.text.split()) != 3:
       return await message.reply_text("⏲Nhập id và số điểm muốn cộng hoặc trừ🪤 \n🚬(ví dụ: /cdiem 12345 +1000 hoặc /cdiem 12345 -1000)🎚")
-  lenh, user_id, diem = message.text.split()
+  #lenh, user_id, diem = message.text.split()
   #user = bot.get_users(user_id)
   if not user_id:
       return await message.reply_text("không tìm thấy người này")
