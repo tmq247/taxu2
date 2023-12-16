@@ -27,7 +27,7 @@ from pyrogram.types import (InlineQueryResultArticle, InputTextMessageContent,
 #from keyboard import ikb
 #from pykeyboard import InlineKeyboard
 from pyromod.exceptions import ListenerTimeout
-#import config
+from config import bot_token, bot_token2, bot_token3, group_id, group_id2, group_id3, admin_id, admin_id2, admin_id3
 
 is_config = os.path.exists("config.py")
 
@@ -65,10 +65,6 @@ user_game_state = {}
 user_balances = {}
 # Dictionary to store user bets
 user_bets = {}  # {user_id: {"bet_type": "", "amount": 0, "chosen_number": ""}}
-
-group_chat_id2 = -1002078347006  # Replace with your second group chat ID
-# Định nghĩa id của nhóm mà bạn muốn gửi thông báo
-group_chat_id = -1002078347006
 
 def get_user_info(user_id):
   try:
@@ -136,12 +132,9 @@ def remove_gitcode(gitcode):
 # Read Gitcodes from the file
 read_gitcodes()
 
-# Define the admin's user ID
-admin_user_id = 6337933296, 6630692765, 5838967403, 6050066066  # Replace with the actual admin user ID
-
 @bot.on_message(filters.command("taocode"))
 async def create_gitcode_handler(_, message):
-    if message.from_user.id not in admin_user_id:
+    if message.from_user.id not in admin:
       return await message.reply_text("Bạn không có quyền thực hiện lệnh này.")
     if len(message.text.split()) != 2:
       return await message.reply_text("Vui lòng nhập số tiền cho giftcode.Ví dụ: /regcode 1000")
@@ -187,9 +180,8 @@ async def process_naptien_gitcode(user_id, gitcode, message):
         remove_gitcode(gitcode)
         del gitcode_amounts[gitcode]
         await message.reply_text(f"Nhập Giftcode Thành Công!\nSố điểm của bạn là: {user_balance[user_id]:,}đ.\n💹Chúc Bạn May Mắn Nhé💖")
-        #group_chat_id = '-1002078347006'
         # Sử dụng phương thức send_message để gửi thông báo vào nhóm
-        await bot.send_message(group_chat_id, f"""
+        await bot.send_message(group_id3, f"""
 Người chơi {message.from_user.first_name} 
 User: {user_id}
 Đã Nạp: {amount:,}đ bằng Giftcode.""")
@@ -277,8 +269,7 @@ async def chuyentien_money(_, message: Message):
     /tangdiem [dấu cách] ID vừa lấy [dấu cách] số điểm.
     VD: /tangdiem 987654321 10000.
     Phí tặng điểm là 5%.""")
-    
-admin = 6337933296, 6630692765, 5838967403, 6050066066    
+       
 @bot.on_message(filters.command("cdiem"))
 async def set_balance(_, message):
   load_balance_from_file()
@@ -329,10 +320,8 @@ async def update_balance(diem, user_id, message):
     text = f"""🔥Chúc mừng {user_ids} đã bơm máu thành công⚡️⚡️"""
     await bot.send_message(user_id, notification_message)
     # Gửi thông báo đến nhóm về việc có người chơi đặt cược
-    group_chat_id2 = -1001712715936
-    group_chat_id = -1002078347006  # Thay thế bằng ID thực sự của nhóm chat
-    await bot.send_message(group_chat_id, notification_message)  # Sử dụng notification_message thay cho result_message
-    await bot.send_message(group_chat_id2, text)
+    await bot.send_message(group_id3, notification_message)  # Sử dụng notification_message thay cho result_message
+    await bot.send_message(group_id, text)
   except ValueError:
     await message.reply_text("Vui lòng nhập một số điểm hợp lệ.⏲Nhập id và số điểm muốn cộng hoặc trừ🪤 \n🚬(ví dụ: /cdiem 12345 +1000 hoặc /cdiem 12345 -1000)🎚")
 
@@ -468,7 +457,7 @@ async def withdraw_balance(_, message):
    [InlineKeyboardButton("Rút qua ngân hàng", callback_data="_bank")]]
   markup = InlineKeyboardMarkup(ruttien)
     # Tạo bàn phím cho phương thức rút
-  if chat_id == group_chat_id:
+  if chat_id == group_id:
     await bot.send_message(chat_id,
                    "Vui lòng nhắn tin riêng với bot")
   await bot.send_message(user_id,
@@ -628,12 +617,10 @@ async def process_withdraw_amountrut(diemrut, user_id):
 ➤Yêu Cầu Rút: {withdraw_amount:,} VNĐ 
 ➤Về {account_type}: {account_info}
           """
-      another_bot_token = "6698135046:AAH7PWSndks__CEgjVZRZHa5FzZUGHf02D4"
-      another_bot_chat_id = "6337933296"
-      another_bot_chat_id2 = "6630692765"
-      requests.get(f"https://api.telegram.org/bot{another_bot_token}/sendMessage?chat_id={another_bot_chat_id}&text={request_message}")
-      requests.get(f"https://api.telegram.org/bot{another_bot_token}/sendMessage?chat_id={another_bot_chat_id2}&text={request_message}")
-      await bot.send_message(group_chat_id, request_message)
+      requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id}&text={request_message}")
+      requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id2}&text={request_message}")
+      requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id3}&text={request_message}")
+      await bot.send_message(group_id3, request_message)
 
       del rut[user_id]
 
@@ -692,7 +679,7 @@ async def napwithdraw_balance(_, message):
   [InlineKeyboardButton("Nạp qua ngân hàng", callback_data="_napbank")]]
   markup = InlineKeyboardMarkup(naptien)
    # Tạo bàn phím cho phương thức rút
-  if chat_id == group_chat_id:
+  if chat_id == group_id:
     await bot.send_message(chat_id,
                    "Vui lòng nhắn tin riêng với bot")
   await bot.send_message(user_id,
@@ -820,7 +807,7 @@ async def process_withdraw_amountnap(diemnap, user_id):
       photo_link = "https://github.com/tmq247/taxu2/blob/main/photo_2023-12-08_03-22-58.jpg?raw=true"
       caption = f"""
 🏧Phương Thức Nạp Bank🏧
-💰Ngân hàng PVCOM💰
+💰 Ngân hàng PVCOM 💰
 🔊Tài Khoản: {napmomo_account}🔚
 
 🔊Nội Dung: napdiem_{user.id} 🔚
@@ -841,14 +828,10 @@ async def process_withdraw_amountnap(diemnap, user_id):
 ➤Yêu Cầu Nạp: {withdraw_amount:,} VNĐ ( {withdraw_amount} )
 ➤Từ {account_type}: {account_info}
           """
-      another_bot_token = "6698135046:AAH7PWSndks__CEgjVZRZHa5FzZUGHf02D4"
-      another_bot_chat_id = "6337933296"
-      another_bot_chat_id2 = "6630692765"
-      another_bot_chat_id3 = "6050066066"
-      requests.get(f"https://api.telegram.org/bot{another_bot_token}/sendMessage?chat_id={another_bot_chat_id}&text={request_message}")
-      requests.get(f"https://api.telegram.org/bot{another_bot_token}/sendMessage?chat_id={another_bot_chat_id2}&text={request_message}")
-      requests.get(f"https://api.telegram.org/bot{another_bot_token}/sendMessage?chat_id={another_bot_chat_id3}&text={request_message}")
-      await bot.send_message(group_chat_id, request_message)
+      requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id}&text={request_message}")
+      requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id2}&text={request_message}")
+      requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id3}&text={request_message}")
+      await bot.send_message(group_id3, request_message)
 
       del nap[user_id]
 
