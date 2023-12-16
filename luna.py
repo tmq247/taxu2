@@ -49,7 +49,7 @@ bot_id = int(bot_token.split(":")[0])
 ###############
 luu_cau = {}
 mo_game = {}
-grtrangthai = {}
+
 
 # Dictionary to store user bets
 user_bets = {}
@@ -132,6 +132,9 @@ def start_taixiu(_, message):
     grid = chat_id
     if chat_id != group_id:
         return bot.send_message(chat_id, "Vào nhóm t.me/sanhallwin để chơi GAME.")
+    if len(mo_game) == 0:
+        grtrangthai = 1
+        game_timer(message, grid, grtrangthai)
         
     if len(mo_game) > 0 and mo_game[grid]['trangthai'] == 2:
         return bot.send_message(chat_id, "Đợi 10s để mở ván mới.")
@@ -160,16 +163,13 @@ def start_taixiu(_, message):
 ┗ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━
 """, reply_markup=reply_markup2)
 
-    if len(mo_game) == 0:
-        grtrangthai = 1
-        game_timer(message, grid, grtrangthai)
-
     else: 
         mo_game.clear()
 
 def game_timer(message, grid, grtrangthai):
-    mo_game[grid] = {'trangthai': 0}  # Initialize the user's bets if not already present
-    mo_game[grid]['trangthai'] += grtrangthai
+    mo_game[grid] = {0}  # Initialize the user's bets if not already present
+    mo_game[grid] += grtrangthai
+    print(mo_game,1)
     nut = [
         [
             InlineKeyboardButton("Bot Nạp - Rút", url="https://t.me/diemallwin_bot"),
@@ -276,8 +276,9 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
 def start_game(message, grid):
     load_balance_from_file()
     grtrangthai2 = 1
-    print(mo_game)
-    mo_game[grid]['trangthai'] += grtrangthai2
+    print(mo_game,2)
+    mo_game[grid] += grtrangthai2
+    print(mo_game,3)
     soicau = [
         [
             InlineKeyboardButton("Soi cầu", url="https://t.me/kqtaixiu"),
