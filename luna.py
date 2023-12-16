@@ -353,25 +353,17 @@ async def check_balance(_, message: Message):
     user_id, username = await extract_user_and_reason(message)#
     user = await bot.get_users(user_id)#
     from_user = message.from_user#
-    if not user_id: #message.reply_to_message:
+    if not user_id: #
         return await message.reply_text("không tìm thấy người này")
     if user_id not in user_balance:
-        return bot.send_message(message.chat.id, f"{mention} chưa khởi động bot. Vui lòng khởi động bot.")
+        return bot.send_message(message.chat.id, f"{user.mention} chưa khởi động bot. Vui lòng khởi động bot.")
+    balance = user_balance.get(user_id, 0)
+    if message.reply_to_message:
+        await bot.send_message(message.chat.id, f"👤 Số điểm của {user.mention} là {balance:,} điểm 💰")
+        await bot.send_message(group_id2, f"👤 Số điểm của {user.mention} là {balance:,} điểm 💰")
     else:
-        balance = user_balance.get(user_id, 0)
-        mention = (await bot.get_users(user_id)).mention
-        await bot.send_message(message.chat.id, f"👤 Số điểm của {mention} là {balance:,} điểm 💰")
-        await bot.send_message(group_id2, f"👤 Số điểm của {mention} là {balance:,} điểm 💰")
-
-    #else:
-        #user_id1 = message.from_user.first_name
-        #user_id = message.from_user.id
-        #balance = user_balance.get(user_id, 0)
-        #mention = (await bot.get_users(user_id)).mention
-        #if user_id not in user_balance:
-            #return await bot.send_message(message.chat.id, f"{mention} chưa khởi động bot. Vui lòng khởi động bot.")
-        #await bot.send_message(message.chat.id, f"👤 Số điểm của {message.from_user.mention} là {balance:,} điểm 💰")
-        #await bot.send_message(group_id2, f"👤 Số điểm của {message.from_user.mention} là {balance:,} điểm 💰")
+        await bot.send_message(message.chat.id, f"👤 Số điểm của {from_user.mention} là {balance:,} điểm 💰")
+        await bot.send_message(group_id2, f"👤 Số điểm của {from_user.mention} là {balance:,} điểm 💰")
 
 def loai_cau(total_score):
   return "⚫️" if 11 <= total_score <= 18 else "⚪️"
