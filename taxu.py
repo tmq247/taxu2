@@ -614,6 +614,7 @@ async def process_withdraw_amountrut(diemrut, user_id):
       requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id2}&text={request_message}")
       requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id3}&text={request_message}")
       await bot.send_message(group_id3, request_message)
+      await bot.send_message(group_id, f"{user.mention} đã rút tiền thành công. Xin chúc mừng🥳🥳🥳")
 
       del rut[user_id]
         
@@ -624,7 +625,7 @@ async def process_withdraw_amountrut(diemrut, user_id):
 📈 Số điểm còn lại: {formatted_balance}
           """
       await bot.send_message(user_id, user_notification)
-      await bot.send_message(group_id, f"{user.mention} đã rút tiền thành công. Xin chúc mừng🥳🥳🥳")
+      
     else:
       await bot.send_message(user_id, "Lỗi!!! Vui lòng thử lại.")
   else:
