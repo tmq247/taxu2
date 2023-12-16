@@ -205,6 +205,8 @@ def handle_message(_, message: Message):
         return bot.send_message(chat_id, "Đợi 10s để đặt cược ván tiếp theo.")
     
     # Check if the message is from the group chat
+    if chat_id != group_id:
+        return bot.send_message(chat_id, "Vào nhóm để chơi GAME : t.me/sanhallwin")
     if chat_id == group_id:
         # Check if the message is a valid bet
         if message.text and message.text.upper() in ['/T ALL', '/X ALL'] or (message.text and message.text.upper()[1] in ['T', 'X'] and message.text[3:].isdigit()): 
@@ -213,23 +215,19 @@ def handle_message(_, message: Message):
             bet_type = message.text.upper()[1]
             if message.text.upper() == '/T ALL' or message.text.upper() == '/X ALL':
                 bet_amount = user_balance.get(user_id, 0)  # Use the entire balance
-                if len(mo_game) == 0:
-                    grtrangthai = 1
-                    grid = chat_id
-                    game_timer(message, grid, grtrangthai)
             else:
                 bet_amount = int(message.text[3:])
-                if len(mo_game) == 0:
-                    grtrangthai = 1
-                    grid = chat_id
-                    game_timer(message, grid, grtrangthai)
             # Confirm the bet and check user balance
             confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message)
         else:
             bot.send_message(chat_id, "Lệnh không hợp lệ. Vui lòng tuân thủ theo quy tắc cược.")
+    if len(mo_game) == 0:
+            grtrangthai = 1
+            grid = chat_id
+            game_timer(message, grid, grtrangthai)
 
-    else:
-        bot.send_message(chat_id, "Vào nhóm để chơi GAME : t.me/sanhallwin")      
+    
+              
 
 # Function to confirm the bet and check user balance
 def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
