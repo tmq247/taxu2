@@ -352,7 +352,7 @@ async def check_balance(_, message: Message):
     load_balance_from_file()
     from_user = message.from_user#
     if len(message.text.split()) == 1:
-        if from_user not in user_balance:
+        if from_user.id not in user_balance:
             return bot.send_message(message.chat.id, f"{from_user.mention} chưa khởi động bot. Vui lòng khởi động bot.")
         balance = user_balance.get(from_user.id, 0)
         await bot.send_message(message.chat.id, f"👤 Số điểm của {from_user.mention} là {balance:,} điểm 💰")
