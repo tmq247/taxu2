@@ -201,7 +201,7 @@ def handle_message(_, message: Message):
     grid = chat_id
     if from_user not in user_balance:
         return bot.send_message(chat_id, "Vui lòng khởi động bot để chơi game.")
-    if len(mo_game) > 0 and mo_game[grid]['trangthai'] == 2:
+    if len(mo_game) > 0 and mo_game[grid]['tthai'] == 2:
         return bot.send_message(chat_id, "Đợi 10s để đặt cược ván tiếp theo.")
     
     # Check if the message is from the group chat
