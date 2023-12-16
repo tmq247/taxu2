@@ -350,8 +350,6 @@ Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
 @bot.on_message(filters.command("diem"))
 async def check_balance(_, message: Message):
     load_balance_from_file()
-    user_id, username = await extract_user_and_reason(message)#
-    user = await bot.get_users(user_id)#
     from_user = message.from_user#
     if len(message.text.split()) == 1 and not message.reply_text:
         if from_user.id not in user_balance:
@@ -360,6 +358,8 @@ async def check_balance(_, message: Message):
         await bot.send_message(message.chat.id, f"👤 Số điểm của {from_user.mention} là {balance:,} điểm 💰")
         await bot.send_message(group_id2, f"👤 Số điểm của {from_user.mention} là {balance:,} điểm 💰")
     if len(message.text.split()) == 1 and message.reply_text: 
+        user_id, username = await extract_user_and_reason(message)#
+        user = await bot.get_users(user_id)#
         if not user_id: #
             return await message.reply_text("không tìm thấy người này")
         if user_id not in user_balance:
@@ -368,6 +368,8 @@ async def check_balance(_, message: Message):
         await bot.send_message(message.chat.id, f"👤 Số điểm của {user.mention} là {balance:,} điểm 💰")
         await bot.send_message(group_id2, f"👤 Số điểm của {user.mention} là {balance:,} điểm 💰")
     else:
+        user_id, username = await extract_user_and_reason(message)#
+        user = await bot.get_users(user_id)#
         if not user_id: #
             return await message.reply_text("không tìm thấy người này")
         if user_id not in user_balance:
