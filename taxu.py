@@ -288,10 +288,11 @@ async def set_balance(_, message):
   if user_id not in user_balance:
       user_balance[user_id] = 0
       return await message.reply_text("Người dùng này chưa khởi động bot.")
-  if diem.isdigit():
-      await update_balance(diem, user_id, message)
+  #if diem.isdigit():
+      #await update_balance(diem, user_id, message)
   else:
-      return await message.reply_text("⏲Nhập id và số điểm muốn cộng hoặc trừ🪤 \n🚬(ví dụ: /cdiem 12345 +1000 hoặc /cdiem 12345 -1000)🎚")
+      #return await message.reply_text("⏲Nhập id và số điểm muốn cộng hoặc trừ🪤 \n🚬(ví dụ: /cdiem 12345 +1000 hoặc /cdiem 12345 -1000)🎚")
+      await update_balance(diem, user_id, message)
    
     
 async def update_balance(diem, user_id, message):
