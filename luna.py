@@ -361,7 +361,7 @@ async def check_balance(_, message: Message):
         balance = user_balance.get(user_id, 0)
         mention = (await bot.get_users(user_id)).mention
         await bot.send_message(message.chat.id, f"👤 Số điểm của {mention} là {balance:,} điểm 💰")
-        await bot.send_message(group_id2, f"👤 Số điểm của {message.from_user.mention} là {balance:,} điểm 💰")
+        await bot.send_message(group_id2, f"👤 Số điểm của {mention} là {balance:,} điểm 💰")
 
     #else:
         #user_id1 = message.from_user.first_name
