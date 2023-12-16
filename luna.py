@@ -359,10 +359,9 @@ async def check_balance(_, message):
         balance = user_balance.get(user_id, 0)
         mention = (await bot.get_users(user_id)).mention
         if user_id not in user_balance:
-            return await bot.send_message(message.chat.id, f"{user_id1} chưa khởi động bot. Vui lòng khởi động bot.")
+            return await bot.send_message(message.chat.id, f"{mention} chưa khởi động bot. Vui lòng khởi động bot.")
         await bot.send_message(message.chat.id, f"👤 Số điểm của {message.from_user.mention} là {balance:,} điểm 💰")
-        request_message = f"""👤 Số điểm của {user_id1} là {balance:,} điểm 💰."""
-        requests.get(f"https://api.telegram.org/bot{bot_token2}/sendMessage?chat_id={group_id2}&text={request_message}")
+        await bot.send_message(group_id2, f"👤 Số điểm của {message.from_user.mention} là {balance:,} điểm 💰")
 
 def loai_cau(total_score):
   return "⚫️" if 11 <= total_score <= 18 else "⚪️"
