@@ -215,6 +215,9 @@ async def deduct_balance(from_user, user_id, amount, message):
 
 @bot.on_message(filters.command("tangdiem"))
 async def chuyentien_money(_, message: Message):
+    user_id, amount = await extract_user_and_reason(message)
+    user = await bot.get_users(user_id)
+    from_user = message.from_user.id
     text = f"""
 Để tặng điểm của mình cho người chơi khác bằng 2 cách:
 Cách 1:Trả lời người muốn tặng điểm bằng lệnh /tangdiem [dấu cách] số điểm.
@@ -229,9 +232,6 @@ Phí tặng điểm là 5%."""
         if len(message.text.split()) == 3:
             #lenh, user_id1, amount = message.text.split(" ", 3)
             if amount.isdigit():
-                user_id, amount = await extract_user_and_reason(message)
-                user = await bot.get_users(user_id)
-                from_user = message.from_user.id
                 if not user_id:
                     return await message.reply_text("không tìm thấy người này")
                 if user_id not in user_balance:
