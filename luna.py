@@ -487,17 +487,10 @@ def listdiem(_, message):
 
 @bot.on_message(filters.command("topdiem"))
 def top_diem(_, message):
+    load_balance_from_file()
     #chat_id = message.chat.id
-
-    with open("id.txt", "r") as f:
-        for line in f:
-            balance_str = line.strip().splitlines()
-            balance = float(balance_str)
-            if balance.is_integer() and balance > 0:
-                balance = int(balance)
-            topdiem.append(balance)
-            top += "\n".join(topdiem.sort(reversed(balance)))
-        bot.send_message(group_id2, f"{top}")
+    #balance = user_balance.get(user_id, 0)
+    bot.send_message(group_id2, f"{user_balance}")
 ######################################################
 async def main():
     await bot.start()
