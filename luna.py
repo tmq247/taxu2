@@ -369,9 +369,9 @@ async def check_balance(_, message: Message):
         await bot.send_message(group_id2, f"👤 Số điểm của {user.mention} là {balance:,} điểm 💰")
     else:
         user_id, username = await extract_user_and_reason(message)#
-        user = await bot.get_users(user_id)#
         if not user_id: #
             return await message.reply_text("không tìm thấy người này")
+        user = await bot.get_users(user_id)#
         if user_id not in user_balance:
             return bot.send_message(message.chat.id, f"{user.mention} chưa khởi động bot. Vui lòng khởi động bot.")
         balance = user_balance.get(user_id, 0)
