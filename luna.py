@@ -115,7 +115,8 @@ def load_balance_from_file():
 
 # Function to send a dice and get its value
 def send_dice(chat_id):
-    response = requests.get(f'https://api.telegram.org/bot{bot_token}/sendDice?chat_id={chat_id}')
+    #response = requests.get(f'https://api.telegram.org/bot{bot_token}/sendDice?chat_id={chat_id}')
+    response = bot.send_dice(message.chat.id, "🎲")
     if response.status_code == 200:
         data = response.json()
         if 'result' in data and 'dice' in data['result']:
@@ -254,9 +255,10 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
             balance = user_balance.get(user_id, 0)
             text += f"Còn {balance:,} điểm"
             request_message = f"""{diemcuoc} \nCược đã được chấp nhận."""
-            requests.get(f"https://api.telegram.org/bot{bot_token2}/sendMessage?chat_id={user_id}&text={request_message}")
+            #requests.get(f"https://api.telegram.org/bot{bot_token2}/sendMessage?chat_id={user_id}&text={request_message}")
             #requests.get(f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={group_id2}&text={text}")
             bot.send_message(group_id, request_message)
+            bot.send_message(user_id, request_message)
             save_balance_to_file()
             bot.send_message(group_id2, text)
         else:
