@@ -34,7 +34,7 @@ from sys import executable
 import aiofiles
 #import speedtest
 #from PIL import Image, ImageDraw, ImageFilter, ImageFont
-#from pyrogram.enums import MessageEntityType
+from pyrogram.enums import MessageEntityType
 from pyrogram.types import Message, MessageEntity
 
 #from wbb import aiohttpsession as aiosession
