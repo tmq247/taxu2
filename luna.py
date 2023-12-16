@@ -217,7 +217,7 @@ def handle_message(_, message: Message):
                 bet_amount = int(message.text[3:])
             # Confirm the bet and check user balance
             confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message)
-        elif len(mo_game) == 0:
+        if len(mo_game) == 0:
             grtrangthai = 1
             grid = chat_id
             game_timer(message, grid, grtrangthai)
