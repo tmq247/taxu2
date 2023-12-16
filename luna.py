@@ -490,10 +490,8 @@ def top_diem(_, message):
     #chat_id = message.chat.id
 
     with open("id.txt", "r") as f:
-        lines = f.read().split()#[-1:-11:-1]
-        top = f"Top 10 điểm cao nhất:\n"
-        for line in lines:
-            user_id, balance_str = line.trip().split()
+        for line in f:
+            user_id, balance_str = line.strip().splitlines()
             balance = float(balance_str)
             if balance.is_integer() and balance > 0:
                 balance = int(balance)
