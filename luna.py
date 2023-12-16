@@ -357,7 +357,7 @@ async def check_balance(_, message: Message):
         return await message.reply_text("không tìm thấy người này")
     if user_id not in user_balance:
         return bot.send_message(message.chat.id, f"{mention} chưa khởi động bot. Vui lòng khởi động bot.")
-     else:
+    else:
         balance = user_balance.get(user_id, 0)
         mention = (await bot.get_users(user_id)).mention
         await bot.send_message(message.chat.id, f"👤 Số điểm của {mention} là {balance:,} điểm 💰")
