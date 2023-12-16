@@ -271,8 +271,8 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
 # Function to start the dice game
 def start_game(message, grid):
     load_balance_from_file()
-    grtrangthai = 1
-    mo_game[grid]['trangthai'] += grtrangthai
+    grtrangthai2 = 1
+    mo_game[grid]['trangthai'] += grtrangthai2
     soicau = [
         [
             InlineKeyboardButton("Soi cầu", url="https://t.me/kqtaixiu"),
