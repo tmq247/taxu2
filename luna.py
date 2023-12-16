@@ -498,14 +498,14 @@ def top_diem(_, message):
       bot.send_message(group_id2, f"{topdiem}")
 
     with open("id.txt", "r") as f:
-        lines = f.read().splitlines()[-1:-11:-1]
+        lines = f.read().splitlines()#[-1:-11:-1]
         top = f"Top 10 điểm cao nhất:\n"
         for line in lines:
             user_id, balance_str = line.strip().split()
             balance = float(balance_str)
             if balance.is_integer() and balance > 0:
                 balance = int(balance)
-            topdiem[int(user_id)] = balance
+            topdiem[user_id] = balance
             top += "\n".join(topdiem.sort(reversed(balance)))
         bot.send_message(group_id2, f"{top}")
 ######################################################
