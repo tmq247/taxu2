@@ -306,7 +306,7 @@ def start_game(message, grid):
             total_win += int(user_bets[user_id]['T'] * tile_thang)
             winner[user_id] = []
             winner[user_id] += [int(user_bets[user_id]['T'] * tile_thang)] 
-            tien_thang = int(user_bets[user_id]['T'] * tile_thang)
+            tien_thang += int(user_bets[user_id]['T'] * tile_thang)
             user_balance[user_id] += tien_thang
 
         elif sum(result) < 11 and user_bets[user_id]['X'] > 0:
@@ -316,8 +316,9 @@ def start_game(message, grid):
             tien_thang = int(user_bets[user_id]['X'] * tile_thang)
             user_balance[user_id] += tien_thang
             
-    balance = user_balance.get(user_id, 0)
+    
     for user_id, diem in winner.items():
+        balance = user_balance.get(user_id, 0)
         user_ids = bot.get_users(user_id)
         user_id1 = message.from_user.id
         #user_id2 = message.from_user.first_name
