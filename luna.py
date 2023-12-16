@@ -306,14 +306,14 @@ def start_game(message, grid):
             total_win += int(user_bets[user_id]['T'] * tile_thang)
             winner[user_id] = []
             winner[user_id] += [int(user_bets[user_id]['T'] * tile_thang)] 
-            tien_thang += int(user_bets[user_id]['T'] * tile_thang)
+            tien_thang = user_bets[user_id]['T'] * tile_thang
             user_balance[user_id] += tien_thang
 
         elif sum(result) < 11 and user_bets[user_id]['X'] > 0:
             total_win += int(user_bets[user_id]['X'] * tile_thang)
             winner[user_id] = []
             winner[user_id] += [int(user_bets[user_id]['X'] * tile_thang)]
-            tien_thang = int(user_bets[user_id]['X'] * tile_thang)
+            tien_thang = user_bets[user_id]['X'] * tile_thang
             user_balance[user_id] += tien_thang
             
     
@@ -327,7 +327,7 @@ def start_game(message, grid):
         kq1 += f"""{user_ids.mention} thắng {diem:,} điểm.Có {balance:,} điểm\n"""
         #kq1 += f"{user_id1} có {balance:,} điểm"
         #requests.get(f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={user_id}&text={kq1}")
-        bot.send_message(group_id, kq)
+        bot.send_message(user_id, kq)
         
     kq += f"""
 Tổng thắng: {total_win:,}đ
