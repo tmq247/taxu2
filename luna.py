@@ -115,8 +115,8 @@ def load_balance_from_file():
 
 # Function to send a dice and get its value
 def send_dice(chat_id):
-    #response = requests.get(f'https://api.telegram.org/bot{bot_token}/sendDice?chat_id={chat_id}')
-    response = bot.send_dice(chat_id, "🎲")
+    response = requests.get(f'https://api.telegram.org/bot{bot_token}/sendDice?chat_id={chat_id}')
+    #response = bot.send_dice(chat_id, "🎲")
     if response.status_code == 200:
         data = response.json()
         if 'result' in data and 'dice' in data['result']:
