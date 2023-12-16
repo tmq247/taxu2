@@ -14,7 +14,8 @@ import pytz
 import threading
 import asyncio
 from pyrogram import filters
-from pyrogram.types import ForceReply, Message, InlineKeyboardButton, InlineKeyboardMarkup, InlineQueryResultArticle, InputTextMessageContent
+from pyrogram.enums import MessageEntityType
+from pyrogram.types import ForceReply, Message, InlineKeyboardButton, InlineKeyboardMarkup, InlineQueryResultArticle, InputTextMessageContent, MessageEntity
 from pyrogram.filters import command
 from functions import (
     extract_user,
@@ -226,9 +227,9 @@ Phí tặng điểm là 5%."""
     print(message.text[2:])
     if len(message.text.split()) != 3 or len(message.text.split()) != 2 :
         if len(message.text.split()) == 3:
-            lenh, user_id1, amount = message.text.split(" ", 3)
+            #lenh, user_id1, amount = message.text.split(" ", 3)
             if amount.isdigit():
-                user_id = await extract_user(message)
+                user_id, amount = await extract_user_and_reason(message)
                 user = await bot.get_users(user_id)
                 from_user = message.from_user.id
                 if not user_id:
