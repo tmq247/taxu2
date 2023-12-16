@@ -351,7 +351,7 @@ Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
 async def check_balance(_, message: Message):
     load_balance_from_file()
     user_id, username = await extract_user_and_reason(message)#
-    user = await app.get_users(user_id)#
+    user = await bot.get_users(user_id)#
     from_user = message.from_user#
     if not user_id: #message.reply_to_message:
         return await message.reply_text("không tìm thấy người này")
