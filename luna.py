@@ -351,13 +351,13 @@ Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
 async def check_balance(_, message: Message):
     load_balance_from_file()
     from_user = message.from_user#
-    if len(message.text.split()) == 1 and not message.reply_text:
+    if len(message.text.split()) == 1 and not message.reply_to_message:
         if from_user.id not in user_balance:
             return bot.send_message(message.chat.id, f"{from_user.mention} chưa khởi động bot. Vui lòng khởi động bot.")
         balance = user_balance.get(from_user.id, 0)
         await bot.send_message(message.chat.id, f"👤 Số điểm của {from_user.mention} là {balance:,} điểm 💰")
         await bot.send_message(group_id2, f"👤 Số điểm của {from_user.mention} là {balance:,} điểm 💰")
-    if message.reply_text: 
+    if len(message.text.split()) == 1 and message.reply_to_message: 
         user_id, username = await extract_user_and_reason(message)#
         user = await bot.get_users(user_id)#
         if not user_id: #
