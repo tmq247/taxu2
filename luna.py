@@ -490,7 +490,7 @@ def soicau_taixiu(_, message):
     #chat_id = message.chat.id
     with open("id.txt", "r") as f:
         a = f.read()
-        bot.send_message(group_id2, f"{a.sort(reverse=True)}")
+        bot.send_message(group_id2, f"{a[1].sort(reverse=True)}")
 ######################################################
 async def main():
     await bot.start()
