@@ -49,7 +49,7 @@ bot_id = int(bot_token.split(":")[0])
 ###############
 luu_cau = {}
 mo_game = {}
-
+topdiem = {}
 
 # Dictionary to store user bets
 user_bets = {}
@@ -479,18 +479,23 @@ Hướng dẫn sử dụng lệnh của bot
     bot.send_message(message.chat.id, text)
 
 @bot.on_message(filters.command("listdiem"))
-def soicau_taixiu(_, message):
+def listdiem(_, message):
     #chat_id = message.chat.id
     with open("id.txt", "r") as f:
         a = f.read()
         bot.send_message(group_id2, f"{a}")
 
 @bot.on_message(filters.command("topdiem"))
-def soicau_taixiu(_, message):
+def top_diem(_, message):
     #chat_id = message.chat.id
     with open("id.txt", "r") as f:
-        a = f.read()
-        bot.send_message(group_id2, f"{a[1].sort(reverse=True)}")
+      for line in f:
+        user_id, balance_str = line.split()
+        balance = float(balance_str)
+        if balance.is_integer():
+          balance = int(balance.sort(reverse=True))
+        topdiem[int(user_id)] = balance
+     bot.send_message(group_id2, f"{topdiem}")
 ######################################################
 async def main():
     await bot.start()
