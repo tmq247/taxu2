@@ -502,7 +502,7 @@ def top_diem(_, message):
         top = f"Top 10 điểm cao nhất:\n"
         for line in lines:
             user_id, balance_str = line.strip().split()
-            if balance.is_integer() and balance > 0:
+            if balance.is_integer():
                 balance = int(balance)
             topdiem[int(user_id)] = balance
             top += "\n".join(topdiem.sort(reversed(balance)))
