@@ -418,7 +418,7 @@ async def show_game_options(msg):
    bot.send_message(msg.chat.id, "Vào @kqtaixiu để xem lịch sử cầu")
    
 # Hàm kiểm tra số dư
-#@bot.on_message(filters.command("diem"))
+@bot.on_message(filters.command("diem"))
 async def check_balance(_, message):
   load_balance_from_file()
   user_id = message.from_user.id
