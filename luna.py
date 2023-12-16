@@ -488,14 +488,6 @@ def listdiem(_, message):
 @bot.on_message(filters.command("topdiem"))
 def top_diem(_, message):
     #chat_id = message.chat.id
-    with open("id.txt", "r") as f:
-      for line in f:
-        user_id, balance_str = line.split()
-        balance = float(balance_str)
-        if balance.is_integer():
-          balance = int(balance)
-        topdiem[int(user_id)] = balance
-      bot.send_message(group_id2, f"{topdiem}")
 
     with open("id.txt", "r") as f:
         lines = f.read().splitlines()#[-1:-11:-1]
