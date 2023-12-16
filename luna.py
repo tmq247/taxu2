@@ -350,22 +350,27 @@ Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
 @bot.on_message(filters.command("diem"))
 async def check_balance(_, message: Message):
     load_balance_from_file()
-    if message.reply_to_message:
-        user_id = await extract_user(message)
-        if user_id not in user_balance:
-            return bot.send_message(message.chat.id, f"{mention} chưa khởi động bot. Vui lòng khởi động bot.")
+    user_id = await extract_user(message)#
+    user = await app.get_users(user_id)#
+    from_user = message.from_user#
+    if not user_id: #message.reply_to_message:
+        return await message.reply_text("không tìm thấy người này")
+    if user_id not in user_balance:
+        return bot.send_message(message.chat.id, f"{mention} chưa khởi động bot. Vui lòng khởi động bot.")
+     else:
         balance = user_balance.get(user_id, 0)
         mention = (await bot.get_users(user_id)).mention
         await bot.send_message(message.chat.id, f"👤 Số điểm của {mention} là {balance:,} điểm 💰")
+        await bot.send_message(group_id2, f"👤 Số điểm của {message.from_user.mention} là {balance:,} điểm 💰")
 
-    else:
-        user_id1 = message.from_user.first_name
-        user_id = message.from_user.id
-        balance = user_balance.get(user_id, 0)
-        mention = (await bot.get_users(user_id)).mention
-        if user_id not in user_balance:
-            return await bot.send_message(message.chat.id, f"{mention} chưa khởi động bot. Vui lòng khởi động bot.")
-        await bot.send_message(message.chat.id, f"👤 Số điểm của {message.from_user.mention} là {balance:,} điểm 💰")
+    #else:
+        #user_id1 = message.from_user.first_name
+        #user_id = message.from_user.id
+        #balance = user_balance.get(user_id, 0)
+        #mention = (await bot.get_users(user_id)).mention
+        #if user_id not in user_balance:
+            #return await bot.send_message(message.chat.id, f"{mention} chưa khởi động bot. Vui lòng khởi động bot.")
+        #await bot.send_message(message.chat.id, f"👤 Số điểm của {message.from_user.mention} là {balance:,} điểm 💰")
         await bot.send_message(group_id2, f"👤 Số điểm của {message.from_user.mention} là {balance:,} điểm 💰")
 
 def loai_cau(total_score):
