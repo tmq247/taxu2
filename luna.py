@@ -49,7 +49,7 @@ bot_id = int(bot_token.split(":")[0])
 ###############
 luu_cau = {}
 mo_game = {}
-topdiem = []
+topdiem = {}
 
 # Dictionary to store user bets
 user_bets = {}
@@ -232,7 +232,6 @@ def handle_message(_, message: Message):
 
 # Function to confirm the bet and check user balance
 def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
-    load_balance_from_file()
     #mention =  bot.get_users(user_id).mention
     user_id = message.from_user.id
     if bet_type == 'T':
@@ -274,7 +273,6 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
 
 # Function to start the dice game
 def start_game(message, grid):
-    load_balance_from_file()
     grtrangthai2 = 1
     print(mo_game,2)
     mo_game[grid]['tthai'] += grtrangthai2
@@ -307,6 +305,7 @@ def start_game(message, grid):
     # Determine the winner and calculate total winnings
     tien_thang = 0
     total_win = 0
+    load_balance_from_file()
     for user_id in user_bets:
         if sum(result) >= 11 and user_bets[user_id]['T'] > 0:
             total_win += int(user_bets[user_id]['T'] * tile_thang)
@@ -491,27 +490,75 @@ def listdiem(_, message):
 def top_diem(_, message):
     load_balance_from_file()
     chat_id = message.chat.id
-    with open("id.txt", "r", encoding='utf-8') as f:
-        lines = f.read().splitlines()
-        top = f"Top 10 điểm cao nhất:\n"
-        for line in lines:
-            user_id, diem = line.split()
-            #diem = int(diem)
-            if int(diem) > 0:
-                topdiem = []
-                topdiem += {user_id}
-                topdiem += {diem}
-                td = topdiem
-                top += f"""{td}\n"""
-            #topdiem[int(user_id)] += (int(diem))
-            # = "/n".join(reversed(diem))
+    if chat_id == group_id2 or group_id3:
+        with open("id.txt", "r", encoding='utf-8') as f:
+            lines = f.read().splitlines()
+            top = f"Top 10 điểm cao nhất:\n"
+            for line in lines:
+                user_id, diem_str = line.strip().split()
+                diem = float(diem_str)
+                diem = int(diem)
+                if diem > 0:
+                    topdiem[user_id] = diem
+                    #topdiem += {user_id}
+                    #topdiem += {diem}
+                    #user_id, diem = topdiem.get()
+                        
+                    #user_id, diem = topdiem.split()
+                    td = sorted(topdiem, key=diem)
+                    top += f"""{td}\n"""
+                    #topdiem[int(user_id)] += (int(diem))
+                    # = "/n".join(reversed(diem))
+        
+                
+            bot.send_message(chat_id, top)
+        #for user_id, balance in user_balance.items():
+            #topdiem = []
+            #topdiem += [user_id], [balance]
+        #bot.send_message(group_id2, f"{topdiem}")
 
-            
-        bot.send_message(chat_id, top)
-    #for user_id, balance in user_balance.items():
-        #topdiem = []
-        #topdiem += [user_id], [balance]
-    #bot.send_message(group_id2, f"{topdiem}")
+@bot.on_message(filters.command("listdata"))
+def list(_, message):
+    chat_id = message.chat.id
+    if chat_id == group_id2 or group_id3:
+        ls = f"luu_cau: {luu_cau}"
+        ls += f"mo_game: {mo_game}"
+        ls += f"topdiem: {topdiem}"
+        ls += f"user_bets: {user_bets}"
+        ls += f"winner: {winner}"
+        ls += f"user_balance: {user_balance}"
+        ls += f"grid_trangthai: {grid_trangthai}"
+        bot.send_message(chat_id, ls)
+
+@bot.on_message(filters.command("xoalist"))
+def list(_, message):
+    chat_id = message.chat.id
+    if chat_id == group_id2 or group_id3:
+        luu_cau.clear()
+        mo_game.clear()
+        topdiem.clear()
+        user_bets.clear()
+        winner.clear()
+        user_balance.clear()
+        grid_trangthai.clear()
+        bot.send_message(chat_id, "Đã clear data")
+
+#################################
+
+#def on_exit():
+  #save_balance_to_file()
+
+# Xử lý khi bot bị tắt hoặc lỗi
+#atexit.register(save_balance_to_file)
+
+@bot.on_message(filters.command("tatbot"))
+@atexit.register
+async def dong(_, message):
+    chat_id = message.chat.id
+    #save_balance_to_file()
+    await bot.send_message(chat_id, "Tắt Bot Game")
+                                          
+        
 ######################################################
 async def main():
     await bot.start()
@@ -522,6 +569,14 @@ async def main():
 -----------------
 """
     )
+    luu_cau.clear()
+    mo_game.clear()
+    topdiem.clear()
+    user_bets.clear()
+    winner.clear()
+    user_balance.clear()
+    grid_trangthai.clear()
+    await bot.send_message(group_id3, "Bot Game đã mở")
     await idle()
 
 
