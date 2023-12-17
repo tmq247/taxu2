@@ -499,7 +499,7 @@ def top_diem(_, message):
             diem = int(diem)
             if diem > 0:
                 topdiem = []
-                topdiem.append({user_id} {diem})
+                topdiem.append({user_id}, {diem})
                 #topdiem += {diem}
             #topdiem[int(user_id)] += (int(diem))
             # = "/n".join(reversed(diem))
