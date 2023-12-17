@@ -493,7 +493,7 @@ def top_diem(_, message):
     #chat_id = message.chat.id
     user_id, balance = user_balance.get()
     topdiem = []
-    topdiem += [user_id : balance]
+    topdiem += [user_id], [balance]
     bot.send_message(group_id2, f"{topdiem}")
 ######################################################
 async def main():
