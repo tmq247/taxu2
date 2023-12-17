@@ -198,9 +198,9 @@ def game_timer(message, grid, grtrangthai):
 def handle_message(_, message: Message):
     load_balance_from_file()
     chat_id = message.chat.id
-    from_user = message.from_user.id
+    user_id = message.from_user.id
     grid = chat_id
-    if from_user not in user_balance:
+    if user_id not in user_balance:
         return bot.send_message(chat_id, "Vui lòng khởi động bot để chơi game.")
     if len(mo_game) > 0 and mo_game[grid]['tthai'] == 2:
         return bot.send_message(chat_id, "Đợi 10s để đặt cược ván tiếp theo.")
