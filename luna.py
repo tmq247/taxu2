@@ -498,6 +498,7 @@ def top_diem(_, message):
             user_id, diem = line.split()
             topdiem = []
             topdiem += {user_id: 0}
+            diem = diem[0]
             topdiem[user_id] += diem
             #topdiem[int(user_id)] += (int(diem))
             #diem = "/n".join(reversed(diem))
