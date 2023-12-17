@@ -93,14 +93,7 @@ def load_balance_from_file():
         user_balance[int(user_id)] = balance
 
 # Gọi hàm load_balance_from_file khi chương trình chạy để tải số dư từ tệp
-load_balance_from_file()
-
-# Hàm xử lý khi bot bị tắt hoặc lỗi, để lưu số dư vào tệp id.txt trước khi thoát
-def on_exit():
-  save_balance_to_file()
-
-# Xử lý khi bot bị tắt hoặc lỗi
-#atexit.register(save_balance_to_file)
+#load_balance_from_file()
 
 # Add these variables for Gitcode handling
 GITCODE_FILE = "gitcode.txt"
@@ -130,8 +123,6 @@ def remove_gitcode(gitcode):
             if not line.startswith(gitcode):
                 f.write(line)
 
-# Read Gitcodes from the file
-read_gitcodes()
 
 @bot.on_message(filters.command("taocode"))
 async def create_gitcode_handler(_, message):
@@ -157,6 +148,7 @@ async def process_gitcode_amount(message, amount):
 
 @bot.on_message(filters.command("code"))
 async def naptien_gitcode(_, message):
+    read_gitcodes()
     from_user = message.from_user.id
     if from_user not in user_balance:
         return bot.send_message(message.chat.id, "Bạn chưa khởi động bot Điểm. Vui lòng khởi động bot để nạp điểm.")
@@ -188,7 +180,6 @@ User: {user_id}
 Đã Nạp: {amount:,}đ bằng Giftcode.""")
         # Save the updated balance to the file
         save_balance_to_file()
-        load_balance_from_file()
     else:
         await message.reply_text("Giftcode không hợp lệ hoặc đã được sử dụng.")
 
@@ -198,7 +189,6 @@ User: {user_id}
 
 # Hàm xử lý chuyển tiền và cập nhật số dư của cả người gửi và người được chuyển
 async def deduct_balance(from_user, user_id, amount, message):
-    load_balance_from_file()
     amount = int(amount)
     if from_user not in user_balance or int(user_balance[from_user]) < amount:
       return await message.reply_text("Bạn không có đủ số điểm để tặng người này.")
@@ -289,22 +279,21 @@ async def set_balance(_, message):
   if user_id not in user_balance:
       user_balance[user_id] = 0
       return await message.reply_text("Người dùng này chưa khởi động bot.")
-  #if diem.isdigit():
-      #await update_balance(diem, user_id, message)
-  else:
-      #return await message.reply_text("⏲Nhập id và số điểm muốn cộng hoặc trừ🪤 \n🚬(ví dụ: /cdiem 12345 +1000 hoặc /cdiem 12345 -1000)🎚")
+  if diem.isdigit():
       await update_balance(diem, user_id, message)
+  else:
+      return await message.reply_text("⏲Nhập id và số điểm muốn cộng hoặc trừ🪤 \n🚬(ví dụ: /cdiem 12345 +1000 hoặc /cdiem 12345 -1000)🎚")
+      #await update_balance(diem, user_id, message)
    
     
 async def update_balance(diem, user_id, message):
-  load_balance_from_file()
   chat_id = message.chat.id
   user_ids = await bot.get_users(user_id)
 
   #if len(user_input) != 3:
       #return await message.reply_text("⏲Nhập id và số điểm muốn cộng hoặc trừ🪤 \n🚬(ví dụ: /cdiem 12345 +1000 hoặc /cdiem 12345 -1000)🎚")
       
-  if user_id in user_balance :#and diem.isdigit():
+  if user_id in user_balance and diem.isdigit():
     balance_change = int(diem)
     current_balance = user_balance.get(user_id, 0)
     new_balance = current_balance + balance_change
@@ -316,13 +305,76 @@ async def update_balance(diem, user_id, message):
 🫂Số Điểm Hiện Tại: {new_balance:,} điểm🐥
 🐝Chúc Bạn Chơi Game Vui Vẻ🐳
 """ 
+    text2 = f"""
+🫥{user_ids.mention} Đã Nạp Điểm Thành Công🤖
+🫥ID {user_id}
+🫂Số Điểm Cũ: {new_balance-balance_change:,} điểm🐥
+🫂Số Điểm Hiện Tại: {new_balance:,} điểm🐥
+🐝Chúc Bạn Chơi Game Vui Vẻ🐳"""
     text = f"""🔥Chúc mừng {user_ids.mention} đã bơm máu thành công⚡️⚡️"""
     await bot.send_message(user_id, notification_message)
-    await bot.send_message(group_id3, notification_message)
+    await bot.send_message(group_id3, text2)
     await bot.send_message(group_id, text)
       
   else:
     await message.reply_text("Vui lòng nhập một số điểm hợp lệ.⏲Nhập id và số điểm muốn cộng hoặc trừ🪤 \n🚬(ví dụ: /cdiem 12345 +1000 hoặc /cdiem 12345 -1000)🎚")
+
+
+@bot.on_message(filters.command("tdiem"))
+async def set_balance(_, message):
+  load_balance_from_file()
+  user_id, diem = await extract_user_and_reason(message)
+  user = await bot.get_users(user_id)
+  from_user = message.from_user.id
+  if from_user not in admin:
+      return await message.reply_text("Bạn không có quyền sử dụng lệnh này.")
+  if len(message.text.split()) != 3:
+      return await message.reply_text("⏲Nhập id và số điểm muốn cộng hoặc trừ🪤 \n🚬(ví dụ: /cdiem 12345 +1000 hoặc /cdiem 12345 -1000)🎚")
+  #lenh, user_id, diem = message.text.split()
+  #user = bot.get_users(user_id)
+  if not user_id:
+      return await message.reply_text("không tìm thấy người này")
+  if user_id not in user_balance:
+      user_balance[user_id] = 0
+      return await message.reply_text("Người dùng này chưa khởi động bot.")
+  if diem.isdigit():
+      await update_balance(diem, user_id, message)
+  else:
+      return await message.reply_text("⏲Nhập id và số điểm muốn cộng hoặc trừ🪤 \n🚬(ví dụ: /cdiem 12345 +1000 hoặc /cdiem 12345 -1000)🎚")
+      #await update_balance(diem, user_id, message)
+   
+    
+async def update_balance(diem, user_id, message):
+  chat_id = message.chat.id
+  user_ids = await bot.get_users(user_id)
+
+  #if len(user_input) != 3:
+      #return await message.reply_text("⏲Nhập id và số điểm muốn cộng hoặc trừ🪤 \n🚬(ví dụ: /cdiem 12345 +1000 hoặc /cdiem 12345 -1000)🎚")
+      
+  if user_id in user_balance and diem.isdigit():
+    balance_change = int(diem)
+    current_balance = user_balance.get(user_id, 0)
+    new_balance = current_balance - balance_change
+    user_balance[user_id] = new_balance
+    save_balance_to_file()
+    #notification_message = f"""
+#🫥{user_ids.mention} Đã Nạp Điểm Thành Công🤖
+#🫥ID {user_id}
+#🫂Số Điểm Hiện Tại: {new_balance:,} điểm🐥
+#🐝Chúc Bạn Chơi Game Vui Vẻ🐳""" 
+    text2 = f"""
+🫥Đã Trừ Điểm {user_ids.mention} Thành Công🤖
+🫥ID {user_id}
+🫂Số Điểm Cũ: {new_balance+balance_change:,} điểm🐥
+🫂Số Điểm Hiện Tại: {new_balance:,} điểm🐥"""
+    #text = f"""🔥Chúc mừng {user_ids.mention} đã bơm máu thành công⚡️⚡️"""
+    #await bot.send_message(user_id, notification_message)
+    await bot.send_message(group_id3, text2)
+    #await bot.send_message(group_id, text)
+      
+  else:
+    await message.reply_text("Vui lòng nhập một số điểm hợp lệ.⏲Nhập id và số điểm muốn cộng hoặc trừ🪤 \n🚬(ví dụ: /cdiem 12345 +1000 hoặc /cdiem 12345 -1000)🎚")
+
 
 
 
@@ -335,17 +387,7 @@ async def show_main_menu(_, message):
     if user_id not in user_balance:
         user_balance[user_id] = 0  # Set initial balance to 0 for new users
         save_balance_to_file()  # Save user balances to the text file
-        
-    
-    markup = ReplyKeyboardMarkup([
-      ["👤 Điểm", "🎲 Soi cầu"],
-      ["💸 Rút Điểm", "💵 Nạp Điểm"],
-      ["📈 Lịch Sử Rút", "📊 Lịch Sử Nạp"],
-      ["📤Tặng Điểm📪", "🫧Nhập CODE💶"],
-  ], resize_keyboard=True)
-    
-  # Send a message with a photo link
-    soicau = [
+    nut = [
         [
             InlineKeyboardButton("Bot GAME", url="https://t.me/alltowin_bot"),
             InlineKeyboardButton("Vào nhóm để chơi GAME", url="https://t.me/sanhallwin"),
@@ -354,7 +396,7 @@ async def show_main_menu(_, message):
             InlineKeyboardButton("Soi cầu", url="https://t.me/kqtaixiu"),
             InlineKeyboardButton("Nạp - Rút", url="https://t.me/diemallwin_bot"),
         ],]
-    reply_markup = InlineKeyboardMarkup(soicau)
+    reply_markup = InlineKeyboardMarkup(nut)
     photo_url = "https://github.com/tmq247/taxu2/blob/main/photo_2023-12-14_21-31-58.jpg?raw=true"
     caption = """
 <code>𝐒ả𝐧𝐡 𝐀𝐋𝐋 𝐖𝐈𝐍</code>
@@ -372,52 +414,16 @@ async def show_main_menu(_, message):
 ⚠️ <b>Tuyệt đối không gian lận chỉnh cầu</b> ❗️
 
 📎 <b> https://t.me/sanhallwin</b> 
+
+Khởi động bot GAME và vào nhóm bên dưới để chơi GAME
 """
     await bot.send_photo(message.chat.id,
                  photo_url,
-                 caption=caption)
-                 #reply_markup=markup)
+                 caption=caption,
+                 reply_markup=reply_markup)
     
-    await bot.send_message(message.chat.id, "Khởi động bot GAME và vào nhóm bên dưới để chơi GAME", reply_markup=reply_markup)
+    #await bot.send_message(message.chat.id, "Khởi động bot GAME và vào nhóm bên dưới để chơi GAME", reply_markup=reply_markup)
 
-
-# Hàm xử lý khi người dùng chọn nút
-@bot.on_callback_query(filters.regex ("👤 Điểm"))
-async def handle_check_balance_button(_, message):
-  check_balance(_, message)
-  
-
-@bot.on_callback_query(filters.regex ("💸 Rút Điểm"))
-async def handle_withdraw_balance_button(_, message):
-  withdraw_balance(_, message)
-  
-
-@bot.on_callback_query(filters.regex ("🎲 Soi cầu"))
-async def handle_game_list_button(_, message):
-  show_game_options(_, message)
-
-@bot.on_callback_query(filters.regex ("💵 Nạp Điểm"))
-async def handle_deposit_button(_, message):
-  napwithdraw_balance(_, message)
-
-@bot.on_callback_query(filters.regex ("📈 Lịch Sử Rút"))
-async def handle_bet_history_button(_, message):
-  show_withdraw_history(_, message)
-
-@bot.on_callback_query(filters.regex ("📊 Lịch Sử Nạp"))
-async def handle_withdraw_history_button(_, message):
-  napshow_withdraw_history(_, message)
-
-@bot.on_callback_query(filters.regex ("📤Tặng Điểm📪"))
-async def handle_chuyentien_money_button(_, message):
-    chuyentien_money(_, message)
-
-@bot.on_callback_query(filters.regex ("🫧Nhập CODE💶"))
-async def handle_naptien_gitcode_button(_, message):
-    naptien_gitcode(_, message)
-
-async def show_game_options(msg):
-   bot.send_message(msg.chat.id, "Vào @kqtaixiu để xem lịch sử cầu")
    
 # Hàm kiểm tra số dư
 @bot.on_message(filters.command("diem"))
@@ -525,6 +531,7 @@ TÊN NGÂN HÀNG - MÃ NGÂN HÀNG
         
 #@bot.on_message(filters.reply & rut in ["momo_account"] or ["bank_account"])
 async def process_account_inforut(_, rutdiem, user_id):
+  load_balance_from_file()
   if user_id in rut and rut in ["momo_account"] or ["bank_account"]:
     try:
       account_info = rutdiem.text
@@ -552,6 +559,7 @@ async def process_account_inforut(_, rutdiem, user_id):
 
 #@bot.on_message(filters.text & rut in ["withdraw_amount_momo"] or ["withdraw_amount_bank"])
 async def process_withdraw_amountrut(diemrut, user_id):
+  load_balance_from_file()
   if user_id in rut and rut[user_id][1] in ["withdraw_amount_momo"] or ["withdraw_amount_bank"]:
     user = await bot.get_users(user_id)
     if diemrut.text.isdigit():
@@ -746,6 +754,7 @@ async def process_account_info_nap(_, napdiem, user_id):
 
 #@bot.on_message(nap in ["withdraw_amount_napmomo", "withdraw_amount_napbank"])
 async def process_withdraw_amountnap(diemnap, user_id):
+  load_balance_from_file()
   if user_id in nap and nap[user_id][1] in ["withdraw_amount_napmomo", "withdraw_amount_napbank"]:
     user = await bot.get_users(user_id)
     if diemnap.text.isdigit():
@@ -803,8 +812,62 @@ async def process_withdraw_amountnap(diemnap, user_id):
 
       del nap[user_id]
 
+@bot.on_message(filters.command("listdata"))
+async def list(_, message):
+    chat_id = message.chat.id
+    if chat_id == group_id2 or group_id3:
+        ls = f"user_state: {user_state}"
+        ls += f"rut: {rut}"
+        ls += f"nap: {nap}"
+        ls += f"user_balance: {user_balance}"
+        ls += f"user_bet_history: {user_bet_history}"
+        ls += f"user_withdraw_history: {user_withdraw_history}"
+        ls += f"napuser_withdraw_history: {napuser_withdraw_history}"
+        ls += f"used_gitcodes: {used_gitcodes}"
+        ls += f"gitcode_amounts: {gitcode_amounts}"
+        ls += f"user_pending_gitcodes: {user_pending_gitcodes}"
+        ls += f"user_game_state: {user_game_state}"
+        ls += f"user_balances: {user_balances}"
+        ls += f"user_bets: {user_bets}"
+        await bot.send_message(chat_id, ls)
+
+@bot.on_message(filters.command("xoalist"))
+async def list(_, message):
+    chat_id = message.chat.id
+    if chat_id == group_id2 or group_id3:
+        user_state.clear()
+        rut.clear()
+        nap.clear()
+        user_balance.clear()
+        user_bet_history.clear()
+        user_withdraw_history.clear()
+        napuser_withdraw_history.clear()
+        used_gitcodes.clear()
+        gitcode_amounts.clear()
+        user_pending_gitcodes.clear()
+        user_game_state.clear()
+        user_balances.clear()
+        user_bets.clear()
+        await bot.send_message(chat_id, "Đã clear data")
+                         
+
 #################################
 
+#def on_exit():
+  #save_balance_to_file()
+
+# Xử lý khi bot bị tắt hoặc lỗi
+#atexit.register(save_balance_to_file)
+
+@bot.on_message(filters.command("tatbot"))
+@atexit.register
+async def dong(_, message):
+    chat_id = message.chat.id
+    #save_balance_to_file()
+    await bot.send_message(chat_id, "Tắt Bot điểm")
+    
+
+##################################
 async def main2():
 
 
@@ -816,6 +879,20 @@ async def main2():
 -----------------
 """
     )
+    user_state.clear()
+    rut.clear()
+    nap.clear()
+    user_balance.clear()
+    user_bet_history.clear()
+    user_withdraw_history.clear()
+    napuser_withdraw_history.clear()
+    used_gitcodes.clear()
+    gitcode_amounts.clear()
+    user_pending_gitcodes.clear()
+    user_game_state.clear()
+    user_balances.clear()
+    user_bets.clear()
+    await bot.send_message(group_id3, "bot Điểm đã mở")
     await idle()
 
 
