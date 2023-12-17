@@ -490,7 +490,7 @@ def listdiem(_, message):
 @bot.on_message(filters.command("topdiem"))
 def top_diem(_, message):
     load_balance_from_file()
-    #chat_id = message.chat.id
+    chat_id = message.chat.id
     with open("id.txt", "r", encoding='utf-8') as f:
         lines = f.read().splitlines()
         top = f"Top 10 điểm cao nhất:\n"
