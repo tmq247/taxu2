@@ -497,7 +497,8 @@ def top_diem(_, message):
         for line in lines:
             user_id, diem = line.split()
             topdiem = []
-            topdiem += [user_id], [diem]
+            topdiem += user_id
+            topdiem[user_id] += diem
             #diem = "/n".join(reversed(diem))
             top += f"""{topdiem}"""
         bot.send_message(chat_id, top)
