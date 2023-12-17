@@ -496,7 +496,8 @@ def top_diem(_, message):
         top = f"Top 10 điểm cao nhất:\n"
         for line in lines:
             user_id, diem = line.split()
-            diem = "/n".join(reversed(diem))
+            
+            #diem = "/n".join(reversed(diem))
             top += f"""{user_id}: {diem}"""
         bot.send_message(chat_id, top)
     #for user_id, balance in user_balance.items():
