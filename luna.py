@@ -498,7 +498,7 @@ def top_diem(_, message):
             user_id, diem = line.strip().split()
             user_id = user_id[0]
             diem = diem[1]
-            diem = "/n".join(sort(reversed(diem)))
+            diem = "/n".join(reversed(diem))
             top += f"""{user_id}: {diem}"""
         bot.send_message(chat_id, top)
     #for user_id, balance in user_balance.items():
