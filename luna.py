@@ -211,7 +211,7 @@ def handle_message(_, message: Message):
     if chat_id == group_id:
         # Check if the message is a valid bet
         if message.text and message.text.upper() in ['/T ALL', '/X ALL'] or (message.text and message.text.upper()[1] in ['T', 'X'] and message.text[3:].isdigit()): 
-            user_id = message.from_user.id
+            #user_id = message.from_user.id
             ten_ncuoc = message.from_user#.mention#first_name
             bet_type = message.text.upper()[1]
             if message.text.upper() == '/T ALL' or message.text.upper() == '/X ALL':
