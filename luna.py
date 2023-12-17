@@ -491,10 +491,20 @@ def listdiem(_, message):
 def top_diem(_, message):
     load_balance_from_file()
     #chat_id = message.chat.id
-    for user_id, balance in user_balance.items():
-        topdiem = []
-        topdiem += [user_id], [balance]
-    bot.send_message(group_id2, f"{topdiem}")
+    with open("id.txt", "r", encoding='utf-8') as f:
+        lines = f.read().splitlines()
+        top = f"Top 10 điểm cao nhất:\n"
+        for line in lines:
+            user_id, diem = line.strip().split()
+            user_id = user_id[0]
+            diem = diem[1]
+            diem = "/n".join(sort(reversed(diem)))
+            top += f"""{user_id}: {diem}"""
+        bot.send_message(chat_id, top)
+    #for user_id, balance in user_balance.items():
+        #topdiem = []
+        #topdiem += [user_id], [balance]
+    #bot.send_message(group_id2, f"{topdiem}")
 ######################################################
 async def main():
     await bot.start()
