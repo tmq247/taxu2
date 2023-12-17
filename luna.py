@@ -496,8 +496,8 @@ def top_diem(_, message):
         top = f"Top 10 điểm cao nhất:\n"
         for line in lines:
             user_id, diem = line.split()
-            diem = int(diem)
-            if diem > 0:
+            #diem = int(diem)
+            if int(diem) > 0:
                 topdiem = []
                 topdiem += {user_id}
                 topdiem += {diem}
