@@ -501,12 +501,12 @@ def top_diem(_, message):
                 topdiem = []
                 topdiem += {user_id}
                 topdiem += {diem}
-        td = sorted(topdiem, key=diem)
+        td = topdiem
             #topdiem[int(user_id)] += (int(diem))
             # = "/n".join(reversed(diem))
 
-        top += f"""{topdiem}\n"""
-        bot.send_message(chat_id, td)
+        top += f"""{td}\n"""
+        bot.send_message(chat_id, top)
     #for user_id, balance in user_balance.items():
         #topdiem = []
         #topdiem += [user_id], [balance]
