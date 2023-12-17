@@ -501,7 +501,7 @@ def top_diem(_, message):
                 topdiem = []
                 topdiem += {user_id}
                 topdiem += {diem}
-                td = sorted(topdiem, key=diem[1])
+                td = topdiem
             #topdiem[int(user_id)] += (int(diem))
             # = "/n".join(reversed(diem))
 
