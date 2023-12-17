@@ -671,9 +671,10 @@ async def naphandle_withdrawal_method_selectionbank(_, callback_query):
   if filters.regex("_napbank"):
     nap[user_id] = "napbank_account"
     await bot.send_message(
-        user_id, """
+        user_id, """***
 Nhập thông tin tài khoản ngân hàng của bạn:
-VD: 0987654321 VCB 
+STK + MÃ NGÂN HÀNG
+VD: 0987654321 VCB
  TÊN NGÂN HÀNG - MÃ NGÂN HÀNG
 📌 Vietcombank => VCB
 📌 BIDV => BIDV 
@@ -708,7 +709,7 @@ VD: 0987654321 VCB
 
 ⚠️ Lưu ý: ❌ Không hỗ trợ hoàn tiền nếu bạn nhập sai thông tin Tài khoản. 
 ❗️ Nạp min 10K
-""")
+***""")
     napdiem = await client.listen(user_id=user_id)
     await process_account_info_nap(_, napdiem, user_id)
 
