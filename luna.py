@@ -491,9 +491,9 @@ def listdiem(_, message):
 def top_diem(_, message):
     load_balance_from_file()
     #chat_id = message.chat.id
-    balance = user_balance.get(user_id, 0)
-    topdiem[user_id] = []
-    topdiem[user_id] += balance
+    user_id, balance = user_balance.get()
+    topdiem = []
+    topdiem += [user_id : balance]
     bot.send_message(group_id2, f"{topdiem}")
 ######################################################
 async def main():
