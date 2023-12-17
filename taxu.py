@@ -847,7 +847,7 @@ async def dong(_, message: Message):
     chat_id = message.chat.id
     #save_balance_to_file()
     await bot.send_message(chat_id, "Tắt Bot điểm")
-    
+    print(Bot điểm đã tắt)
 
 ##################################
 async def main2():
