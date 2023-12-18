@@ -148,8 +148,8 @@ async def process_gitcode_amount(message, amount):
 @bot.on_message(filters.command("code"))
 async def naptien_gitcode(_, message: Message):
     read_gitcodes()
-    from_user = message.from_user.id
-    if from_user not in user_balance:
+    user_id = message.from_user.id
+    if user_id not in user_balance:
         user_balance[user_id] = 0
     if len(message.text.split()) != 2:
        return await message.reply_text("Nhập Code bằng lệnh /code [dấu cách] code của bạn \n➡️VD: /code ABCD") 
