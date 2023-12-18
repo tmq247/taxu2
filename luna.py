@@ -221,8 +221,6 @@ def handle_message(_, message: Message):
         return Luna.send_message(chat_id, "Đợi 10s để đặt cược ván tiếp theo.")
     
     # Check if the message is from the group chat
-    if chat_id != group_id:
-        return Luna.send_message(chat_id, "Vào nhóm để chơi GAME : t.me/sanhallwin")
     if chat_id == group_id:
         # Check if the message is a valid bet
         if message.text and message.text.upper() in ['/T ALL', '/X ALL'] or (message.text and message.text.upper()[1] in ['T', 'X'] and message.text[3:].isdigit()): 
@@ -246,8 +244,6 @@ def handle_message(_, message: Message):
 
 # Function to confirm the bet and check user balance
 def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
-    from_user = message.from_user.id
-    user_id = int(Luna.get_users(from_user).id)
     if bet_type == 'T':
         cua_cuoc = '⚫️Tài'
     else:
@@ -636,12 +632,12 @@ async def chuyentien_money(_, message: Message):
 # Xử lý khi bot bị tắt hoặc lỗi
 #atexit.register(save_balance_to_file)
 
-@Luna.on_message(filters.command("tatbotgame"))
-@atexit.register
-async def dong(_, message: Message):
-    chat_id = message.chat.id
+#@Luna.on_message(filters.command("tatbotgame"))
+#@atexit.register
+#async def dong(_, message: Message):
+    #chat_id = message.chat.id
     #save_balance_to_file()
-    await Luna.send_message(chat_id, "Tắt Bot Game")
+    #await Luna.send_message(chat_id, "Tắt Bot Game")
                                           
         
 ######################################################
