@@ -244,6 +244,7 @@ def handle_message(_, message: Message):
 
 # Function to confirm the bet and check user balance
 def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
+    load_balance_from_file()
     if bet_type == 'T':
         cua_cuoc = '⚫️Tài'
     else:
@@ -291,6 +292,7 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
 
 # Function to start the dice game
 def start_game(message, grid):
+    load_balance_from_file()
     grtrangthai2 = 1
     print(mo_game,2)
     mo_game[grid]['tthai'] += grtrangthai2
@@ -323,7 +325,6 @@ def start_game(message, grid):
     # Determine the winner and calculate total winnings
     tien_thang = 0
     total_win = 0
-    load_balance_from_file()
     for user_id in user_bets:
         if sum(result) >= 11 and user_bets[user_id]['T'] > 0:
             total_win += int(user_bets[user_id]['T'] * tile_thang)
@@ -359,6 +360,7 @@ Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
     Luna.send_message(group_id, kq, reply_markup=reply_markup)
     Luna.send_message(group_id2, kq1)
     save_balance_to_file()
+    load_balance_from_file()
     user_bets.clear()
     winner.clear()
     mo_game.clear()
