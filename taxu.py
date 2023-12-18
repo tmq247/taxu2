@@ -862,7 +862,6 @@ async def main2():
     user_state.clear()
     rut.clear()
     nap.clear()
-    user_balance.clear()
     user_bet_history.clear()
     user_withdraw_history.clear()
     napuser_withdraw_history.clear()
