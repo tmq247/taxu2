@@ -609,6 +609,7 @@ async def process_withdraw_amountrut(diemrut, user_id):
 📬 Rút điểm thành công!
 ⏺ Số điểm rút: {withdraw_amount:,} VNĐ
 📈 Số điểm còn lại: {formatted_balance}
+💵 sẽ đc chuyển trong vòng 15 phút. Xin cảm ơn!!!
           """
       await bot.send_message(user_id, user_notification)
       await bot.send_message(group_id, f"""{user.mention} đã rút điểm thành công. Xin chúc mừng🥳🥳🥳 ( sẽ nhận 💵 trong vòng 15 phút )""")
