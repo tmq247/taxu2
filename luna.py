@@ -68,15 +68,15 @@ def mo_bot(user_id):
         return
     if user_id not in bot_trangthai:
         bot_trangthai[user_id] = trangthai
-        with open(bot_FILE, "a") as f:
+        with open("bot.txt", "a") as f:
             f.write(f"{user_id} {trangthai}\n")
         return user_id
     
 
 # Function to read Gitcodes from the file
 def xem_bot():
-    if os.path.exists("bot_FILE"):
-        with open(bot_FILE, "r") as f:
+    if os.path.exists("bot.txt"):
+        with open("bot.txt", "r") as f:
             for line in f:
                 user_id, trangthai  = line.strip().split()
                 bot_trangthai[user_id] = trangthai
