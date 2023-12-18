@@ -601,7 +601,7 @@ async def process_withdraw_amountrut(diemrut, user_id):
       requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id2}&text={request_message}")
       requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id3}&text={request_message}")
       await bot.send_message(group_id3, request_message)
-      await bot.send_message(group_id2, f"user.mention} đã rút {withdraw_amount:,}đ ,còn {formatted_balance}đ.")
+      await bot.send_message(group_id2, f"{user.mention} đã rút {withdraw_amount:,}đ ,còn {formatted_balance}đ.")
 
       del rut[user_id]
         
