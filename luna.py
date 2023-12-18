@@ -134,6 +134,7 @@ def calculate_tai_xiu(total_score):
 
 @Luna.on_message(filters.command("tx"))
 def start_taixiu(_, message: Message):
+    xem_bot()
     chat_id = message.chat.id
     grid = chat_id
     if chat_id != group_id:
@@ -420,6 +421,7 @@ def ls_cau(result):
 
 @Luna.on_message(filters.command("soicau"))
 def soicau_taixiu(_, message: Message):
+    xem_bot()
     chat_id = message.chat.id
     #load_cau_from_file()
     soicau = [
@@ -446,6 +448,7 @@ def show_main_menu(_, message: Message):
         mo_bot(user_id)
         print(bot_trangthai)
   # Check if the user is already in the user_balance dictionary
+    xem_bot()
     if user_id not in user_balance:
         user_balance[user_id] = 0  # Set initial balance to 0 for new users
         save_balance_to_file()  # Save user balances to the text file
