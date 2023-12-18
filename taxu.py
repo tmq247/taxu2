@@ -435,8 +435,8 @@ async def withdraw_balance(_, message: Message):
   rut[user_id] = "withdraw_method"
   user_game_state.pop(user_id, None)  # Clear game state to avoid conflicts
 
-  ruttien = [[InlineKeyboardButton("Rút qua MoMo", callback_data="_momo")],
-   [InlineKeyboardButton("Rút qua ngân hàng", callback_data="_bank")]]
+  ruttien = [[InlineKeyboardButton("Rút qua ngân hàng", callback_data="_bank")]]
+   #[[InlineKeyboardButton("Rút qua MoMo", callback_data="_momo")]
   markup = InlineKeyboardMarkup(ruttien)
     # Tạo bàn phím cho phương thức rút
   if chat_id == group_id:
