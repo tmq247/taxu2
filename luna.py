@@ -207,6 +207,8 @@ def handle_message(_, message: Message):
     #user_id = Luna.get_users(from_user).id
     grid = chat_id
     xem_bot()
+    if chat_id != group_id:
+        return Luna.send_message(chat_id, "Vào nhóm t.me/sanhallwin để chơi GAME.")
     if user_id not in bot_trangthai:
         nut = [
         [
