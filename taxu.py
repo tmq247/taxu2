@@ -307,6 +307,7 @@ async def update_balance_cong(diem, user_id, message):
     text = f"""🔥Chúc mừng {user.mention} đã bơm máu thành công⚡️⚡️"""
     await bot.send_message(user_id, notification_message)
     await bot.send_message(group_id3, text2)
+    await bot.send_message(group_id2, text2)
     await bot.send_message(group_id, text)
       
   else:
