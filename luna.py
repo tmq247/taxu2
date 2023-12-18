@@ -657,8 +657,6 @@ async def main():
     topdiem.clear()
     user_bets.clear()
     winner.clear()
-    user_balance.clear()
-    bot_trangthai.clear()
     await Luna.send_message(group_id3, "Bot Game đã mở")
     await idle()
 
