@@ -180,6 +180,7 @@ User: {user_id}
 Đã Nạp: {amount:,}đ bằng Giftcode.""")
         # Save the updated balance to the file
         save_balance_to_file()
+        load_balance_from_file()
     else:
         await message.reply_text("Giftcode không hợp lệ hoặc đã được sử dụng.")
 
@@ -200,6 +201,7 @@ async def deduct_balance(from_user, user_id, amount, message):
 
     # Lưu số dư vào tệp văn bản
     save_balance_to_file()
+    load_balance_from_file()
     return True
     
 
@@ -294,6 +296,7 @@ async def update_balance_cong(diem, user_id, message):
     new_balance = current_balance + balance_change
     user_balance[user_id] = new_balance
     save_balance_to_file()
+    load_balance_from_file()
     notification_message = f"""
 🫥Bạn Đã Nạp Điểm Thành Công🤖
 🫂Số Điểm Hiện Tại: {new_balance:,} điểm🐥
@@ -348,6 +351,7 @@ async def update_balance_tru(diem, user_id, message):
     new_balance = current_balance - balance_change
     user_balance[user_id] = new_balance
     save_balance_to_file()
+    load_balance_from_file()
     #notification_message = f"""
 #🫥{user_ids.mention} Đã Nạp Điểm Thành Công🤖
 #🫥ID {user_id}
@@ -511,7 +515,6 @@ TÊN NGÂN HÀNG - MÃ NGÂN HÀNG
         
 #@bot.on_message(filters.reply & rut in ["momo_account"] or ["bank_account"])
 async def process_account_inforut(_, rutdiem, user_id):
-  load_balance_from_file()
   if user_id in rut and rut in ["momo_account"] or ["bank_account"]:
     try:
       account_info = rutdiem.text
@@ -605,7 +608,7 @@ async def process_withdraw_amountrut(diemrut, user_id):
       await bot.send_message(group_id2, f"{user.mention} đã rút {withdraw_amount:,}đ ,còn {formatted_balance}đ.")
 
       del rut[user_id]
-        
+      load_balance_from_file() 
       time.sleep(10)
       user_notification = f"""
 📬 Rút điểm thành công!
