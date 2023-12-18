@@ -15,20 +15,19 @@ import threading
 import asyncio
 from pyrogram import filters
 from pyrogram.enums import MessageEntityType
-from pyrogram.types import ForceReply, Message, InlineKeyboardButton, InlineKeyboardMarkup, InlineQueryResultArticle, InputTextMessageContent, MessageEntity
+from pyrogram.types import ForceReply, Message, InlineKeyboardButton, InlineKeyboardMarkup, InlineQueryResultArticle, InputTextMessageContent, MessageEntity, ReplyKeyboardMarkup
 from pyrogram.filters import command
 from functions import (
     extract_user,
     extract_user_and_reason,
     time_converter
 )
-from pyrogram.types import (InlineQueryResultArticle, InputTextMessageContent,
-                            InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup)
 #from telebot.util import quick_markup
 #from keyboard import ikb
 #from pykeyboard import InlineKeyboard
 from pyromod.exceptions import ListenerTimeout
-from config import bot_token, bot_token2, bot_token3, group_id, group_id2, group_id3, admin_id, admin_id2, admin_id3
+from config import bot_token, bot_token2, bot_token3, group_id, group_id2, group_id3, admin_id, admin_id2, admin_id3, channel_id
+#from luna import Luna, main
 
 is_config = os.path.exists("config.py")
 
@@ -93,7 +92,7 @@ def load_balance_from_file():
         user_balance[int(user_id)] = balance
 
 # Gọi hàm load_balance_from_file khi chương trình chạy để tải số dư từ tệp
-#load_balance_from_file()
+load_balance_from_file()
 
 # Add these variables for Gitcode handling
 GITCODE_FILE = "gitcode.txt"
@@ -228,8 +227,8 @@ Phí tặng điểm là 5%."""
                     user_balance[user_id] = 0
                 if await deduct_balance(from_user, user_id, amount, message):
                     amount = int(amount)
-                    await message.reply_text(f"{from_user1} đã tặng {user.mention} {int(amount*0.95):,}đ. Phí tặng điểm là 5%")
                     await bot.send_message(user_id, f"Bạn đã nhận được {int(amount*0.95):,}đ được tặng từ {from_user1}, id người dùng là: {from_user}.")
+                    await message.reply_text(f"{from_user1} đã tặng {user.mention} {int(amount*0.95):,}đ. Phí tặng điểm là 5%")
                     await bot.send_message(group_id3, f"{from_user1} đã tặng {user.mention} {int(amount*0.95):,}đ. ID người tặng là: {from_user}.")
                     return
             else:
@@ -237,9 +236,9 @@ Phí tặng điểm là 5%."""
         
         #if and message.text[2:].isdigit():
         if len(message.text.split()) == 2 and message.reply_to_message:
-            lenh, amount = message.text.split(" ", 2)
+            user_id, amount = await extract_user_and_reason(message)
+            #lenh, amount = message.text.split(" ", 2)
             if amount.isdigit():
-                user_id = await extract_user(message)
                 user = await bot.get_users(user_id)
                 if not user_id:
                     return await message.reply_text("không tìm thấy người này")
@@ -380,12 +379,12 @@ async def show_main_menu(_, message: Message):
         save_balance_to_file()  # Save user balances to the text file
     nut = [
         [
-            InlineKeyboardButton("Bot GAME", url="https://t.me/alltowin_bot"),
+            InlineKeyboardButton("Bot GAME", url="https://t.me/alltowin_bot?start=hi"),
             InlineKeyboardButton("Vào nhóm để chơi GAME", url="https://t.me/sanhallwin"),
         ],
         [
             InlineKeyboardButton("Soi cầu", url="https://t.me/kqtaixiu"),
-            InlineKeyboardButton("Nạp - Rút", url="https://t.me/diemallwin_bot"),
+            InlineKeyboardButton("Nạp - Rút", url="https://t.me/diemallwin_bot?start=hi""),
         ],]
     reply_markup = InlineKeyboardMarkup(nut)
     photo_url = "https://github.com/tmq247/taxu2/blob/main/photo_2023-12-14_21-31-58.jpg?raw=true"
@@ -406,7 +405,7 @@ async def show_main_menu(_, message: Message):
 
 📎 <b> https://t.me/sanhallwin</b> 
 
-Khởi động bot GAME và vào nhóm bên dưới để chơi GAME
+LƯU Ý: BẤM VÀO NÚT bot GAME VÀ NÚT vào nhóm bên dưới để chơi GAME
 """
     await bot.send_photo(message.chat.id,
                  photo_url,
@@ -847,11 +846,10 @@ async def dong(_, message: Message):
     chat_id = message.chat.id
     #save_balance_to_file()
     await bot.send_message(chat_id, "Tắt Bot điểm")
-    print(Bot điểm đã tắt)
+    print("Bot điểm đã tắt")
 
 ##################################
 async def main2():
-
 
     await bot.start()
     print(
