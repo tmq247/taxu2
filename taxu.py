@@ -840,7 +840,7 @@ async def list(_, message: Message):
 # Xử lý khi bot bị tắt hoặc lỗi
 #atexit.register(save_balance_to_file)
 
-@bot.on_message(filters.command("tatbot"))
+@bot.on_message(filters.command("tatbotdiem"))
 @atexit.register
 async def dong(_, message: Message):
     chat_id = message.chat.id
