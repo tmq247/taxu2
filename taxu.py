@@ -869,7 +869,6 @@ async def main2():
     gitcode_amounts.clear()
     user_pending_gitcodes.clear()
     user_game_state.clear()
-    user_balances.clear()
     user_bets.clear()
     await bot.send_message(group_id3, "bot Điểm đã mở")
     await idle()
