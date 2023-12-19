@@ -258,8 +258,8 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
     
     # Check if the user_id is present in user_balance dictionary
     if user_id in user_balance:
-        if bet_amount <= 0:
-            Luna.send_message(user_id, "Bạn không đủ điểm để đặt cược, vui lòng nạp điểm.")
+        if bet_amount <= 0 and user_balance[user_id] <= 0:
+            return Luna.send_message(user_id, "Bạn không đủ điểm để đặt cược, vui lòng nạp điểm.")
         # Check user balance
         if user_balance[user_id] >= bet_amount:
             try:
