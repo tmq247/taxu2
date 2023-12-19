@@ -275,11 +275,13 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
                 Luna.send_message(user_id, request_message)
                 Luna.send_message(group_id, request_message)
                 Luna.send_message(group_id2, text)
-                save_balance_to_file()
+            
             except Exception as e:
                 print("Error fetching user info:", e)
                 Luna.send_message(group_id3, f"Lỗi:{e}")
                 Luna.send_message(group_id, f"Lỗi:{ten_ncuoc.mention} chưa khởi động Bot @alltowin_bot, hãy khởi động bot và đặt cược lại.")
+
+        save_balance_to_file()
         else:
             Luna.send_message(group_id, "Không đủ số dư để đặt cược. Vui lòng kiểm tra lại số dư của bạn.")
     else:
@@ -638,14 +640,14 @@ def on_exit():
   save_balance_to_file()
 
 # Xử lý khi bot bị tắt hoặc lỗi
-atexit.register(save_balance_to_file)
+atexit.register(save_balance_to_file())
 
-@Luna.on_message(filters.command("tatbotgame"))
-#@atexit.register
-async def dong(_, message: Message):
-    #chat_id = message.chat.id
-    #save_balance_to_file()
-    #await Luna.send_message(chat_id, "Tắt Bot Game")
+#@Luna.on_message(filters.command("tatbotgame"))
+@atexit.register
+async def dong():
+    chat_id = message.chat.id
+    save_balance_to_file()
+    await Luna.send_message(group_id3, "Tắt Bot Game")
                                           
         
 ######################################################
