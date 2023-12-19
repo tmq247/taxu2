@@ -640,7 +640,7 @@ def on_exit():
   save_balance_to_file()
 
 # Xử lý khi bot bị tắt hoặc lỗi
-atexit.register(save_balance_to_file())
+atexit.register(save_balance_to_file)
 
 @Luna.on_message(filters.command("tatbotgame"))
 @atexit.register
