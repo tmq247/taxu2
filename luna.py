@@ -642,12 +642,13 @@ def on_exit():
 # Xử lý khi bot bị tắt hoặc lỗi
 atexit.register(save_balance_to_file())
 
-#@Luna.on_message(filters.command("tatbotgame"))
+@Luna.on_message(filters.command("tatbotgame"))
 @atexit.register
 async def dong():
-    chat_id = message.chat.id
+    #chat_id = message.chat.id
     save_balance_to_file()
     await Luna.send_message(group_id3, "Tắt Bot Game")
+    await Luna.stop()
                                           
         
 ######################################################
