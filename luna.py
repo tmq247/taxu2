@@ -68,7 +68,7 @@ def mo_bot(user_id):
         return
     if user_id not in bot_trangthai:
         bot_trangthai[user_id] = trangthai
-        with open("bot.txt", "a") as f:
+        with open("bot.txt", "w") as f:
             f.write(f"{user_id} {trangthai}\n")
         return user_id
     
@@ -80,6 +80,8 @@ def xem_bot():
             for line in f:
                 user_id, trangthai  = line.strip().split()
                 bot_trangthai[user_id] = trangthai
+
+xem_bot()
 
 # Function to remove a used Gitcode
 def xoa_grid(grid):
@@ -108,6 +110,8 @@ def load_balance_from_file():
                     balance = int(balance)
                 user_balance[int(user_id)] = balance
 
+load_balance_from_file()
+
 def get_user_info(user_id):
   try:
     user = bot.get_chat(user_id)
@@ -117,7 +121,7 @@ def get_user_info(user_id):
     return None
 
 #######################################################
-load_balance_from_file()
+
 # Function to send a dice and get its value
 def send_dice(chat_id):
     response = requests.get(f'https://api.telegram.org/bot{bot_token}/sendDice?chat_id={chat_id}')
@@ -245,7 +249,7 @@ def handle_message(_, message: Message):
 
 # Function to confirm the bet and check user balance
 def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
-    #load_balance_from_file()
+    load_balance_from_file()
     if bet_type == 'T':
         cua_cuoc = '⚫️Tài'
     else:
@@ -271,17 +275,17 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
                 request_message = f"""{diemcuoc} \nCược đã được chấp nhận."""
                 #requests.get(f"https://api.telegram.org/bot{bot_token2}/sendMessage?chat_id={user_id}&text={request_message}")
                 #requests.get(f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={group_id2}&text={text}")
-                print(user_id)
                 Luna.send_message(user_id, request_message)
                 Luna.send_message(group_id, request_message)
                 Luna.send_message(group_id2, text)
+                save_balance_to_file()
+                load_balance_from_file()
             
             except Exception as e:
                 print("Error fetching user info:", e)
                 Luna.send_message(group_id3, f"Lỗi:{e}")
                 Luna.send_message(group_id, f"Lỗi:{ten_ncuoc.mention} chưa khởi động Bot @alltowin_bot, hãy khởi động bot và đặt cược lại.")
 
-        save_balance_to_file()
         else:
             Luna.send_message(group_id, "Không đủ số dư để đặt cược. Vui lòng kiểm tra lại số dư của bạn.")
     else:
@@ -328,6 +332,7 @@ def start_game(message, grid):
     # Determine the winner and calculate total winnings
     #tien_thang = 0
     total_win = 0
+    load_balance_from_file()
     for user_id in user_bets:
         if sum(result) >= 11 and user_bets[user_id]['T'] > 0:
             total_win += int(user_bets[user_id]['T'] * tile_thang)
@@ -343,7 +348,8 @@ def start_game(message, grid):
             #tien_thang = user_bets[user_id]['X'] * tile_thang
             user_balance[user_id] += (int(user_bets[user_id]['X'] * tile_thang))
             
-    save_balance_to_file()        
+    save_balance_to_file()
+    load_balance_from_file()
     
     for user_id, diem in winner.items():
         balance = user_balance.get(user_id, 0)
@@ -374,12 +380,11 @@ Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
 
 @Luna.on_message(filters.command("diem"))
 async def check_balance(_, message: Message):
-    #load_balance_from_file()
-    xem_bot()
+    load_balance_from_file()
     from_user = message.from_user#
     if len(message.text.split()) == 1 and not message.reply_to_message:
         if from_user.id not in user_balance:
-            return Luna.send_message(message.chat.id, f"{from_user.mention} chưa khởi động bot. Vui lòng khởi động bot.")
+            return await Luna.send_message(message.chat.id, f"{from_user.mention} chưa khởi động bot. Vui lòng khởi động bot.")
         balance = user_balance.get(from_user.id, 0)
         await Luna.send_message(message.chat.id, f"👤 Số điểm của {from_user.mention} là {balance:,} điểm 💰")
         await Luna.send_message(group_id2, f"👤 Số điểm của {from_user.mention} là {balance:,} điểm 💰")
@@ -451,7 +456,7 @@ def show_main_menu(_, message: Message):
         mo_bot(user_id)
         print(bot_trangthai)
   # Check if the user is already in the user_balance dictionary
-    xem_bot()
+    #xem_bot()
     if user_id not in user_balance:
         user_balance[user_id] = 0  # Set initial balance to 0 for new users
         save_balance_to_file()  # Save user balances to the text file
@@ -497,14 +502,14 @@ def soicau_taixiu(_, message: Message):
     text = f"""
 Hướng dẫn sử dụng lệnh của bot
 /tx :mở game tài xỉu
-/t điểm :đặt cửa tài với số điểm muốn cược
-/x điểm: đặt cửa xỉu với số điểm muốn cược
+/t điểm: đặt cửa tài với số điểm muốn cược (/t all: để all in tài).
+/x điểm: đặt cửa xỉu với số điểm muốn cược (/x all: để all in xỉu).
 /diem :để xem điểm hiện có
 /soicau :để soi cầu
 /tangdiem [id người nhận] số điểm muốn tặng :để tặng điểm cho người khác (bạn có thể trả lời tin nhắn của người muốn tặng để nhập lệnh tặng và số điểm muốn tặng) .Lưu ý :phí tặng 5%.
 /nap :để nạp điểm
 /rut :để rút điểm
-/code code của bạn :để nhận điểm bằng code
+/code [code của bạn] :để nhận điểm bằng code
 
 LƯU Ý: BẤM VÀO 2 NÚT BÊN DƯỚI ĐỂ CHƠI GAME.
 """
@@ -516,12 +521,24 @@ LƯU Ý: BẤM VÀO 2 NÚT BÊN DƯỚI ĐỂ CHƠI GAME.
     reply_markup = InlineKeyboardMarkup(nut)
     Luna.send_message(message.chat.id, text, reply_markup=reply_markup)
 
-@Luna.on_message(filters.command("listdiem"))
+@Luna.on_message(filters.command("listdata"))
 def listdiem(_, message: Message):
-    #chat_id = message.chat.id
+    chat_id = message.chat.id
     with open("id.txt", "r") as f:
         a = f.read()
         Luna.send_message(group_id2, f"{a}")
+        #ls = f"luu_cau: {luu_cau}"
+        #ls += f"mo_game: {mo_game}"
+        #ls += f"topdiem: {topdiem}"
+        #ls += f"user_bets: {user_bets}"
+        #ls += f"winner: {winner}"
+        ls = f"user_balance: {user_balance}"
+        #ls += f"bot_trangthai: {bot_trangthai}"
+        Luna.send_message(chat_id, ls)
+        save_balance_to_file()
+        load_balance_from_file()
+        Luna.send_message(chat_id, ls)
+    
 
 @Luna.on_message(filters.command("topdiem"))
 def top_diem(_, message: Message):
@@ -529,7 +546,7 @@ def top_diem(_, message: Message):
     chat_id = message.chat.id
     if chat_id == group_id2 or group_id3:
         with open("id.txt", "r", encoding='utf-8') as f:
-            lines = f.read().splitlines()
+            lines = f.read().split()
             top = f"Top 10 điểm cao nhất:\n"
             for line in lines:
                 user_id, diem_str = line.strip().split()
@@ -549,12 +566,13 @@ def top_diem(_, message: Message):
         
                 
             Luna.send_message(chat_id, top)
+            
         #for user_id, balance in user_balance.items():
             #topdiem = []
             #topdiem += [user_id], [balance]
         #Luna.send_message(group_id2, f"{topdiem}")
 
-@Luna.on_message(filters.command("listdata"))
+#@Luna.on_message(filters.command("listdata"))
 def list(_, message: Message):
     chat_id = message.chat.id
     if chat_id == group_id2 or group_id3:
@@ -566,6 +584,7 @@ def list(_, message: Message):
         ls += f"user_balance: {user_balance}"
         ls += f"bot_trangthai: {bot_trangthai}"
         Luna.send_message(chat_id, ls)
+        
 
 @Luna.on_message(filters.command("xoalist"))
 def list(_, message: Message):
@@ -583,72 +602,27 @@ def list(_, message: Message):
 
 ################################
 
-#@Luna.on_message(filters.command("tangdiem"))
-async def chuyentien_money(_, message: Message):
-    from_user = message.from_user.id
-    #load_balance_from_file()
-    if len(message.text.split()) != 3 or len(message.text.split()) != 2 :
-        if len(message.text.split()) == 3:
-            user_id, amount = await extract_user_and_reason(message)
-            user = await Luna.get_users(user_id)
-            from_user1 = message.from_user.mention
-            #lenh, user_id, amount = message.text.split(" ", 3)
-            if amount.isdigit():
-                if not user_id:
-                    return await message.reply_text("không tìm thấy người này")
-                #if user_id not in user_balance:
-                    #user_balance[user_id] = 0
-                #if await deduct_balance(from_user, user_id, amount, message):
-                amount = int(amount)
-                #await message.reply_text(f"{from_user1} đã tặng {user.mention} {int(amount*0.95):,}đ. Phí tặng điểm là 5%")
-                await Luna.send_message(user_id, f"Bạn đã nhận được {int(amount*0.95):,}đ được tặng từ {from_user1}, id người dùng là: {from_user}.")
-                #await Luna.send_message(group_id3, f"{from_user1} đã tặng {user.mention} {int(amount*0.95):,}đ. ID người tặng là: {from_user}.")
-                return
-            else:
-                return await message.reply(text)
-        
-        #if and message.text[2:].isdigit():
-        if len(message.text.split()) == 2 and message.reply_to_message:
-            user_id, amount = await extract_user_and_reason(message)
-            #lenh, amount = message.text.split(" ", 2)
-            if amount.isdigit():
-                user = await Luna.get_users(user_id)
-                if not user_id:
-                    return await message.reply_text("không tìm thấy người này")
-                #if user_id not in user_balance:
-                    #user_balance[user_id] = 0
-                #if await deduct_balance(from_user, user_id, amount, message):
-                amount = int(amount)
-                from_user1 = message.from_user.mention
-                #await message.reply_text(f"{from_user1} đã tặng {user.mention} {int(amount*0.95):,}đ. Phí tặng điểm là 5%")
-                await Luna.send_message(user_id, f"Bạn đã nhận được {int(amount*0.95):,}đ được tặng từ {from_user1}, id người dùng là: {from_user}.")
-                #await Luna.send_message(group_id3, f"{from_user1} đã tặng {user.mention} {int(amount*0.95):,}đ, id người tặng là: {from_user}.")
-                return
-            
-            else:
-                return
-        
-        else:
-            return
 
-    else:
-        return
 
 #################################
-
+@atexit.register
 def on_exit():
-  save_balance_to_file()
+    save_balance_to_file()
+    #Luna.send_message(group_id3, "Bot Game đã tắt")
+    print("Bot Game đã tắt")
 
 # Xử lý khi bot bị tắt hoặc lỗi
-atexit.register(save_balance_to_file)
+#atexit.register(on_exit)
 
-@Luna.on_message(filters.command("tatbotgame"))
-@atexit.register
-async def dong():
+#@Luna.on_message(filters.command("tatbotgame"))
+#@atexit.register
+def dong(_, message):
     #chat_id = message.chat.id
     save_balance_to_file()
-    await Luna.send_message(group_id3, "Tắt Bot Game")
-    await Luna.stop()
+    Luna.send_message(group_id3, "Tắt Bot Game")
+    print("Bot game đã tắt")
+    Luna.stop()
+    #loop.stop()
                                           
         
 ######################################################
