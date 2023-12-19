@@ -172,9 +172,14 @@ async def process_naptien_gitcode(user_id, gitcode, message):
         load_balance_from_file()
         remove_gitcode(gitcode)
         del gitcode_amounts[gitcode]
-        await message.reply_text(f"Nhập Giftcode Thành Công!\nSố điểm của bạn là: {user_balance[user_id]:,}đ.\n💹Chúc Bạn May Mắn Nhé💖")
+        await bot.send_message(group_id, f"Chúc mừng {message.from_user.mention} đã nhận được điểm bằng Giftcode.\n💹Chúc Bạn May Mắn Nhé💖")
+        await bot.send_message(user_id, f"Nhập Giftcode Thành Công!\nSố điểm của bạn là: {user_balance[user_id]:,}đ.\n💹Chúc Bạn May Mắn Nhé💖")
         # Sử dụng phương thức send_message để gửi thông báo vào nhóm
         await bot.send_message(group_id3, f"""
+Người chơi {message.from_user.mention} 
+User: {user_id}
+Đã Nạp: {amount:,}đ bằng Giftcode.""")
+        await bot.send_message(group_id2, f"""
 Người chơi {message.from_user.mention} 
 User: {user_id}
 Đã Nạp: {amount:,}đ bằng Giftcode.""")
@@ -231,7 +236,7 @@ Phí tặng điểm là 5%."""
                     amount = int(amount)
                     await bot.send_message(user_id, f"Bạn đã nhận được {int(amount*0.95):,}đ được tặng từ {from_user1}, id người dùng là: {from_user}.")
                     await message.reply_text(f"{from_user1} đã tặng {user.mention} {int(amount*0.95):,}đ. Phí tặng điểm là 5%")
-                    await bot.send_message(group_id3, f"{from_user1} đã tặng {user.mention} {int(amount*0.95):,}đ. ID người tặng là: {from_user}.")
+                    await bot.send_message(group_id3, f"{from_user1} đã tặng {user.mention} {int(amount*0.95):,}đ. ID người tặng và nhận là: {from_user}, {user_id}.")
                     return
             else:
                 return await message.reply(text)
@@ -251,7 +256,7 @@ Phí tặng điểm là 5%."""
                     from_user1 = message.from_user.mention
                     await message.reply_text(f"{from_user1} đã tặng {user.mention} {int(amount*0.95):,}đ. Phí tặng điểm là 5%")
                     await bot.send_message(user_id, f"Bạn đã nhận được {int(amount*0.95):,}đ được tặng từ {from_user1}, id người dùng là: {from_user}.")
-                    await bot.send_message(group_id3, f"{from_user1} đã tặng {user.mention} {int(amount*0.95):,}đ, id người tặng là: {from_user}.")
+                    await bot.send_message(group_id3, f"{from_user1} đã tặng {user.mention} {int(amount*0.95):,}đ, ID người tặng và nhận là: {from_user}, {user_id}.")
                     return
             
             else:
@@ -352,28 +357,18 @@ async def update_balance_tru(diem, user_id, message):
     user_balance[user_id] = new_balance
     save_balance_to_file()
     load_balance_from_file()
-    #save_balance_to_file()
-    #load_balance_from_file()
-    #notification_message = f"""
-#🫥{user_ids.mention} Đã Nạp Điểm Thành Công🤖
-#🫥ID {user_id}
-#🫂Số Điểm Hiện Tại: {new_balance:,} điểm🐥
-#🐝Chúc Bạn Chơi Game Vui Vẻ🐳""" 
+
     text2 = f"""
 🫥Đã Trừ Điểm {user.mention} Thành Công🤖
 🫥ID {user_id}
 🫂Số Điểm Cũ: {new_balance+balance_change:,} điểm🐥
 🫂Số Điểm Hiện Tại: {new_balance:,} điểm🐥"""
-    #text = f"""🔥Chúc mừng {user_ids.mention} đã bơm máu thành công⚡️⚡️"""
-    #await bot.send_message(user_id, notification_message)
+    
     await bot.send_message(group_id3, text2)
-    #await bot.send_message(group_id, text)
+    await bot.send_message(group_id2, text)
       
   else:
     await message.reply_text("Vui lòng nhập một số điểm hợp lệ.⏲Nhập id và số điểm muốn trừ🪤 \n🚬(ví dụ: /tdiem 12345 1000)🎚)🎚")
-
-
-
 
 ###########################
 
@@ -604,7 +599,7 @@ async def process_withdraw_amountrut(diemrut, user_id):
 📬 Rút điểm thành công!
 ⏺ Số điểm rút: {withdraw_amount:,} VNĐ
 📈 Số điểm còn lại: {formatted_balance}
-💵 sẽ đc chuyển trong vòng 15 phút. Xin cảm ơn!!!
+yêu cầu sẽ được sử lý trong vòng 15 phút. Xin cảm ơn!!!
           """
       await bot.send_message(user_id, user_notification)
       await bot.send_message(group_id, f"""{user.mention} đã rút điểm thành công. Xin chúc mừng🥳🥳🥳 (yêu cầu sẽ được sử lý trong vòng 15 phút )""")
@@ -770,6 +765,8 @@ async def process_withdraw_amountnap(diemnap, user_id):
 🔊Vui lòng chụp lại bill.🔚
 🔊Không Hỗ Trợ Lỗi Nội Dung.🔚
 🔊NẠP NHANH BẰNG MÃ QR PHÍA BÊN DƯỚI NHÉ 🔚
+
+***Yêu cầu sẽ được sử lý trong vòng 15 phút sau khi chuyển khoản.*** 
       """
       await bot.send_message(user_id, caption)
       await bot.send_photo(user_id, photo_link)
