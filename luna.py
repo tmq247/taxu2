@@ -612,7 +612,9 @@ def list(_, message: Message):
 @atexit.register
 def on_exit():
     save_balance_to_file()
+    request_message = f"Bot Game đã tắt"
     #Luna.send_message(group_id3, "Bot Game đã tắt")
+    requests.get(f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={group_id3}&text={request_message}")
     print("Bot Game đã tắt")
 
 # Xử lý khi bot bị tắt hoặc lỗi
