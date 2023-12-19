@@ -795,10 +795,10 @@ async def process_withdraw_amountnap(diemnap, user_id):
 # Hàm kiểm tra số dư
 @bot.on_message(filters.command("diem"))
 async def check_balance(_, message: Message):
-  load_balance_from_file()
-  user_id = message.from_user.id
-  balance = user_balance.get(user_id, 0)
-  await bot.send_message(user_id, f"""
+    load_balance_from_file()
+    user_id = message.from_user.id
+    balance = user_balance.get(user_id, 0)
+    await bot.send_message(user_id, f"""
 👤 Tên tài khoản: {message.from_user.mention}
 💳 ID Tài khoản: {user_id}
 💰 Số dư của bạn: {balance:,} đ
