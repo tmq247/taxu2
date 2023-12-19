@@ -80,7 +80,6 @@ def xem_bot():
             for line in f:
                 user_id, trangthai  = line.strip().split()
                 bot_trangthai[user_id] = trangthai
-
 xem_bot()
 
 # Function to remove a used Gitcode
@@ -109,7 +108,6 @@ def load_balance_from_file():
                 if balance.is_integer():
                     balance = int(balance)
                 user_balance[int(user_id)] = balance
-
 load_balance_from_file()
 
 def get_user_info(user_id):
