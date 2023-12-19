@@ -392,7 +392,7 @@ async def check_balance(_, message: Message):
     if len(message.text.split()) == 1 and message.reply_to_message: 
         user_id, username = await extract_user_and_reason(message)#
         user = await Luna.get_users(user_id)#
-        if user_id in admin
+        if user_id in admin:
             return
         if not user_id: #
             return await message.reply_text("không tìm thấy người này")
@@ -405,7 +405,7 @@ async def check_balance(_, message: Message):
     else:
         user_id, username = await extract_user_and_reason(message)#
         user = await Luna.get_users(user_id)#
-        if user_id in admin
+        if user_id in admin:
             return
         if not user_id: #
             return await message.reply_text("không tìm thấy người này")
