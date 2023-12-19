@@ -794,48 +794,19 @@ async def process_withdraw_amountnap(diemnap, user_id):
     del nap[user_id]
 
 
-@bot.on_message(filters.command("diem"))
-async def check_balance2(_, message: Message):
-    await check_balance(_, message)
-    load_balance_from_file()
-    #xem_bot()
-    from_user = message.from_user#
-    if len(message.text.split()) == 1 and not message.reply_to_message:
-        if from_user.id not in user_balance:
-            return await bot.send_message(message.chat.id, f"{from_user.mention} chưa khởi động bot. Vui lòng khởi động bot.")
-        balance = user_balance.get(from_user.id, 0)
-        await bot.send_message(message.chat.id, f"👤 Số điểm của {from_user.mention} là {balance:,} điểm 💰")
-        await bot.send_message(group_id2, f"👤 Số điểm của {from_user.mention} là {balance:,} điểm 💰")
-        return
-    if len(message.text.split()) == 1 and message.reply_to_message: 
-        user_id, username = await extract_user_and_reason(message)#
-        user = await bot.get_users(user_id)#
-        if not user_id: #
-            return await message.reply_text("không tìm thấy người này")
-        if user_id not in user_balance:
-            return bot.send_message(message.chat.id, f"{user.mention} chưa khởi động bot. Vui lòng khởi động bot.")
-        balance = user_balance.get(user_id, 0)
-        await bot.send_message(message.chat.id, f"👤 Số điểm của {user.mention} là {balance:,} điểm 💰")
-        await bot.send_message(group_id2, f"👤 Số điểm của {user.mention} là {balance:,} điểm 💰")
-        return
-    else:
-        user_id, username = await extract_user_and_reason(message)#
-        user = await bot.get_users(user_id)#
-        if not user_id: #
-            return await message.reply_text("không tìm thấy người này")
-        if user_id not in user_balance:
-            return bot.send_message(message.chat.id, f"{user.mention} chưa khởi động bot. Vui lòng khởi động bot.")
-        balance = user_balance.get(user_id, 0)
-        await bot.send_message(message.chat.id, f"👤 Số điểm của {user.mention} là {balance:,} điểm 💰")
-        await bot.send_message(group_id2, f"👤 Số điểm của {user.mention} là {balance:,} điểm 💰")
 
 # Hàm kiểm tra số dư
-#@bot.on_message(filters.command("diem"))
+@bot.on_message(filters.command("diem"))
 async def check_balance(_, message: Message):
   load_balance_from_file()
   user_id = message.from_user.id
   balance = user_balance.get(user_id, 0)
-  await bot.send_message(group_id2, f"""
+  await bot.send_message(user_id, f"""
+👤 Tên tài khoản: {message.from_user.mention}
+💳 ID Tài khoản: {user_id}
+💰 Số dư của bạn: {balance:,} đ
+        """)
+    await bot.send_message(group_id2, f"""
 👤 Tên tài khoản: {message.from_user.mention}
 💳 ID Tài khoản: {user_id}
 💰 Số dư của bạn: {balance:,} đ
