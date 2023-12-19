@@ -851,7 +851,7 @@ atexit.register(save_balance_to_file())
 async def dong():
     #chat_id = message.chat.id
     save_balance_to_file()
-    await bot.send_message(chat_id, "Tắt Bot điểm")
+    await bot.send_message(group_id3, "Tắt Bot điểm")
     print("Bot điểm đã tắt")
 
 ##################################
