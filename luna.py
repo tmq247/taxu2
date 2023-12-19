@@ -456,7 +456,7 @@ def show_main_menu(_, message: Message):
         mo_bot(user_id)
         print(bot_trangthai)
   # Check if the user is already in the user_balance dictionary
-    #xem_bot()
+    xem_bot()
     if user_id not in user_balance:
         user_balance[user_id] = 0  # Set initial balance to 0 for new users
         save_balance_to_file()  # Save user balances to the text file
