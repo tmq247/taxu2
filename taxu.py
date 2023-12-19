@@ -162,13 +162,13 @@ async def naptien_gitcode(_, message: Message):
           await message.reply_text("Giftcode không hợp lệ hoặc đã được sử dụng.")
     
 async def process_naptien_gitcode(user_id, gitcode, message):
-    load_balance_from_file()
+    #load_balance_from_file()
     if gitcode in gitcode_amounts:
         amount = gitcode_amounts[gitcode]
         # Check if the user's balance exists in the dictionary, initialize it if not
         if user_id not in user_balance:
             user_balance[user_id] = 0
-            save_balance_to_file()
+            #save_balance_to_file()
         user_balance[user_id] += amount
         remove_gitcode(gitcode)
         del gitcode_amounts[gitcode]
@@ -179,8 +179,8 @@ Người chơi {message.from_user.mention}
 User: {user_id}
 Đã Nạp: {amount:,}đ bằng Giftcode.""")
         # Save the updated balance to the file
-        save_balance_to_file()
-        load_balance_from_file()
+        #save_balance_to_file()
+        #load_balance_from_file()
     else:
         await message.reply_text("Giftcode không hợp lệ hoặc đã được sử dụng.")
 
@@ -350,8 +350,8 @@ async def update_balance_tru(diem, user_id, message):
         return await bot.send_message(group_id3, f"{user.mention} không đủ điểm để trừ")
     new_balance = current_balance - balance_change
     user_balance[user_id] = new_balance
-    save_balance_to_file()
-    load_balance_from_file()
+    #save_balance_to_file()
+    #load_balance_from_file()
     #notification_message = f"""
 #🫥{user_ids.mention} Đã Nạp Điểm Thành Công🤖
 #🫥ID {user_id}
