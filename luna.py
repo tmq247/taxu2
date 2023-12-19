@@ -275,7 +275,7 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
                 Luna.send_message(user_id, request_message)
                 Luna.send_message(group_id, request_message)
                 Luna.send_message(group_id2, text)
-                #save_balance_to_file()
+                save_balance_to_file()
             except Exception as e:
                 print("Error fetching user info:", e)
                 Luna.send_message(group_id3, f"Lỗi:{e}")
@@ -640,9 +640,9 @@ def on_exit():
 # Xử lý khi bot bị tắt hoặc lỗi
 atexit.register(save_balance_to_file)
 
-#@Luna.on_message(filters.command("tatbotgame"))
+@Luna.on_message(filters.command("tatbotgame"))
 #@atexit.register
-#async def dong(_, message: Message):
+async def dong(_, message: Message):
     #chat_id = message.chat.id
     #save_balance_to_file()
     #await Luna.send_message(chat_id, "Tắt Bot Game")
