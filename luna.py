@@ -202,7 +202,7 @@ def game_timer(message, grid, grtrangthai):
 
 @Luna.on_message(filters.command(["t", "x"]) & filters.text)
 def handle_message(_, message: Message):
-    load_balance_from_file()
+    #load_balance_from_file()
     chat_id = message.chat.id
     user_id = message.from_user.id
     #user_id = Luna.get_users(from_user).id
@@ -245,7 +245,7 @@ def handle_message(_, message: Message):
 
 # Function to confirm the bet and check user balance
 def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
-    load_balance_from_file()
+    #load_balance_from_file()
     if bet_type == 'T':
         cua_cuoc = '⚫️Tài'
     else:
@@ -275,7 +275,7 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
                 Luna.send_message(user_id, request_message)
                 Luna.send_message(group_id, request_message)
                 Luna.send_message(group_id2, text)
-                save_balance_to_file()
+                #save_balance_to_file()
             except Exception as e:
                 print("Error fetching user info:", e)
                 Luna.send_message(group_id3, f"Lỗi:{e}")
@@ -293,7 +293,7 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
 
 # Function to start the dice game
 def start_game(message, grid):
-    load_balance_from_file()
+    #load_balance_from_file()
     grtrangthai2 = 1
     print(mo_game,2)
     mo_game[grid]['tthai'] += grtrangthai2
@@ -341,8 +341,7 @@ def start_game(message, grid):
             #tien_thang = user_bets[user_id]['X'] * tile_thang
             user_balance[user_id] += (int(user_bets[user_id]['X'] * tile_thang))
             
-    save_balance_to_file()
-    load_balance_from_file()        
+    save_balance_to_file()        
     
     for user_id, diem in winner.items():
         balance = user_balance.get(user_id, 0)
@@ -373,7 +372,7 @@ Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
 
 @Luna.on_message(filters.command("diem"))
 async def check_balance(_, message: Message):
-    load_balance_from_file()
+    #load_balance_from_file()
     xem_bot()
     from_user = message.from_user#
     if len(message.text.split()) == 1 and not message.reply_to_message:
@@ -445,7 +444,7 @@ def soicau_taixiu(_, message: Message):
 @Luna.on_message(filters.command("start"))
 def show_main_menu(_, message: Message):
     user_id = message.from_user.id
-    load_balance_from_file()
+    #load_balance_from_file()
     if user_id not in bot_trangthai and filters.private:
         mo_bot(user_id)
         print(bot_trangthai)
@@ -524,7 +523,7 @@ def listdiem(_, message: Message):
 
 @Luna.on_message(filters.command("topdiem"))
 def top_diem(_, message: Message):
-    load_balance_from_file()
+    #load_balance_from_file()
     chat_id = message.chat.id
     if chat_id == group_id2 or group_id3:
         with open("id.txt", "r", encoding='utf-8') as f:
@@ -582,10 +581,10 @@ def list(_, message: Message):
 
 ################################
 
-@Luna.on_message(filters.command("tangdiem"))
+#@Luna.on_message(filters.command("tangdiem"))
 async def chuyentien_money(_, message: Message):
     from_user = message.from_user.id
-    load_balance_from_file()
+    #load_balance_from_file()
     if len(message.text.split()) != 3 or len(message.text.split()) != 2 :
         if len(message.text.split()) == 3:
             user_id, amount = await extract_user_and_reason(message)
@@ -635,11 +634,11 @@ async def chuyentien_money(_, message: Message):
 
 #################################
 
-#def on_exit():
-  #save_balance_to_file()
+def on_exit():
+  save_balance_to_file()
 
 # Xử lý khi bot bị tắt hoặc lỗi
-#atexit.register(save_balance_to_file)
+atexit.register(save_balance_to_file)
 
 #@Luna.on_message(filters.command("tatbotgame"))
 #@atexit.register
