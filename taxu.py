@@ -350,6 +350,8 @@ async def update_balance_tru(diem, user_id, message):
         return await bot.send_message(group_id3, f"{user.mention} không đủ điểm để trừ")
     new_balance = current_balance - balance_change
     user_balance[user_id] = new_balance
+    save_balance_to_file()
+    load_balance_from_file()
     #save_balance_to_file()
     #load_balance_from_file()
     #notification_message = f"""
@@ -853,6 +855,7 @@ async def dong():
     save_balance_to_file()
     await bot.send_message(group_id3, "Tắt Bot điểm")
     print("Bot điểm đã tắt")
+    await bot.stop()
 
 ##################################
 async def main2():
