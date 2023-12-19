@@ -846,7 +846,7 @@ async def list(_, message: Message):
   #save_balance_to_file()
 
 # Xử lý khi bot bị tắt hoặc lỗi
-atexit.register(save_balance_to_file())
+atexit.register(save_balance_to_file)
 
 #@bot.on_message(filters.command("tatbotdiem"))
 @atexit.register
