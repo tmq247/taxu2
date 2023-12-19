@@ -324,23 +324,25 @@ def start_game(message, grid):
     ls_cau(result)
     Luna.send_message(channel_id, kq)
     # Determine the winner and calculate total winnings
-    tien_thang = 0
+    #tien_thang = 0
     total_win = 0
     for user_id in user_bets:
         if sum(result) >= 11 and user_bets[user_id]['T'] > 0:
             total_win += int(user_bets[user_id]['T'] * tile_thang)
             winner[user_id] = []
             winner[user_id] += [int(user_bets[user_id]['T'] * tile_thang)] 
-            tien_thang = user_bets[user_id]['T'] * tile_thang
-            user_balance[user_id] += (int(tien_thang))
+            #tien_thang = user_bets[user_id]['T'] * tile_thang
+            user_balance[user_id] += (int(user_bets[user_id]['T'] * tile_thang))
 
         elif sum(result) < 11 and user_bets[user_id]['X'] > 0:
             total_win += int(user_bets[user_id]['X'] * tile_thang)
             winner[user_id] = []
             winner[user_id] += [int(user_bets[user_id]['X'] * tile_thang)]
-            tien_thang = user_bets[user_id]['X'] * tile_thang
-            user_balance[user_id] += (int(tien_thang))
+            #tien_thang = user_bets[user_id]['X'] * tile_thang
+            user_balance[user_id] += (int(user_bets[user_id]['X'] * tile_thang))
             
+    save_balance_to_file()
+    load_balance_from_file()        
     
     for user_id, diem in winner.items():
         balance = user_balance.get(user_id, 0)
@@ -360,8 +362,8 @@ Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
     """  
     Luna.send_message(group_id, kq, reply_markup=reply_markup)
     Luna.send_message(group_id2, kq1)
-    save_balance_to_file()
-    load_balance_from_file()
+    
+    
     user_bets.clear()
     winner.clear()
     mo_game.clear()
