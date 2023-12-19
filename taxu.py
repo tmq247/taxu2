@@ -365,7 +365,7 @@ async def update_balance_tru(diem, user_id, message):
 🫂Số Điểm Hiện Tại: {new_balance:,} điểm🐥"""
     
     await bot.send_message(group_id3, text2)
-    await bot.send_message(group_id2, text)
+    await bot.send_message(group_id2, text2)
       
   else:
     await message.reply_text("Vui lòng nhập một số điểm hợp lệ.⏲Nhập id và số điểm muốn trừ🪤 \n🚬(ví dụ: /tdiem 12345 1000)🎚)🎚")
