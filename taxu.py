@@ -856,8 +856,10 @@ async def list(_, message: Message):
 @atexit.register
 def on_exit():
     save_balance_to_file()
+    request_message = f"Bot Điểm đã tắt"
     #bot.send_message(group_id3, "Bot điểm đã tắt")
-    print("Bot điểm đã tắt")
+    requests.get(f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={group_id3}&text={request_message}")
+    print("Bot Điểm đã tắt")
 
 # Xử lý khi bot bị tắt hoặc lỗi
 #atexit.register(on_exit)
@@ -867,8 +869,8 @@ def on_exit():
 async def dong(_, message):
     #chat_id = message.chat.id
     save_balance_to_file()
-    await bot.send_message(group_id3, "Tắt Bot điểm")
-    print("Bot điểm đã tắt")
+    await bot.send_message(group_id3, "Tắt Bot Điểm")
+    print("Bot Điểm đã tắt")
     await bot.stop()
     #loop.stop()
 
