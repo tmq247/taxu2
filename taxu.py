@@ -617,7 +617,7 @@ async def process_withdraw_amountrut(diemrut, user_id):
 💵 sẽ đc chuyển trong vòng 15 phút. Xin cảm ơn!!!
           """
       await bot.send_message(user_id, user_notification)
-      await bot.send_message(group_id, f"""{user.mention} đã rút điểm thành công. Xin chúc mừng🥳🥳🥳 ( sẽ nhận 💵 trong vòng 15 phút )""")
+      await bot.send_message(group_id, f"""{user.mention} đã rút điểm thành công. Xin chúc mừng🥳🥳🥳 (yêu cầu sẽ được sử lý trong vòng 15 phút )""")
     else:
       await bot.send_message(user_id, "Lỗi!!! Vui lòng thử lại.")
   else:
