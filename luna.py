@@ -373,9 +373,9 @@ Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
     
     user_bets.clear()
     winner.clear()
-    mo_game.clear()
     luu_cau.clear()
-    #time.sleep(1)
+    time.sleep(10)
+    mo_game.clear()
     Luna.delete_messages(group_id, idtext4)
 
 @Luna.on_message(filters.command("diem"))
