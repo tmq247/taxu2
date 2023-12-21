@@ -308,25 +308,27 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
 #####################################
 @Luna.on_message(filters.command("ct"))
 def chinh_cau(_, message: Message):
-    lenh = message.text.split(" ", 1)
+    lenh = message.text.split()
     print(lenh)
     user_id = message.from_user.id
     if user_id == admin_id or user_id == admin_id2:
         chinhcau[group_id] = {"cầu": 0}
         ccau = 1
         chinhcau[group_id]["cầu"] += ccau
+        print(chinhcau)
         Luna.send_message(user_id, f"{chinhcau}")
     return
 
 @Luna.on_message(filters.command("cx"))
 def chinh_cau(_, message: Message):
-    lenh = message.text.split(" ", 1)
+    lenh = message.text.split()
     print(lenh)
     user_id = message.from_user.id
     if user_id == admin_id or user_id == admin_id2:
         chinhcau[group_id] = {"cầu": 0}
         ccau = 1
         chinhcau[group_id]["cầu"] += ccau
+        print(chinhcau)
         Luna.send_message(user_id, f"{chinhcau}")
     return
 #########################################
