@@ -329,7 +329,7 @@ def chinh_cauxiu(_, message: Message):
     user_id = message.from_user.id
     if user_id in admin2:
         chinhcau[group_id] = {"cầu": 0}
-        ccau = 1
+        ccau = 2
         chinhcau[group_id]["cầu"] += ccau
         print(chinhcau)
         Luna.send_message(user_id, f"{chinhcau}")
