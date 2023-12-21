@@ -306,20 +306,27 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
         Luna.send_message(group_id, f"Người chơi chưa khởi động Luna, vui lòng khởi động bot và thử lại. \nHÃY VÀO 2 BOT BÊN DƯỚI, KHỞI ĐỘNG BOT ĐỂ CÓ THỂ CHƠI GAME.", reply_markup=reply_markup)
 
 #####################################
-@Luna.on_message(filters.command(["ct", "cx"]))
+@Luna.on_message(filters.command("ct"))
 def chinh_cau(_, message: Message):
     lenh = message.text.split(" ", 1)
     print(lenh)
     user_id = message.from_user.id
     if user_id == admin_id or user_id == admin_id2:
         chinhcau[group_id] = {"cầu": 0}
-        if lenh == ['/ct']:
-            ccau = 1
-            chinhcau[group_id]["cầu"] += ccau
-    
-        if lenh == ['/cx']:
-            ccau = 2
-            chinhcau[group_id]["cầu"] += ccau
+        ccau = 1
+        chinhcau[group_id]["cầu"] += ccau
+        Luna.send_message(user_id, f"{chinhcau}")
+    return
+
+@Luna.on_message(filters.command("cx"))
+def chinh_cau(_, message: Message):
+    lenh = message.text.split(" ", 1)
+    print(lenh)
+    user_id = message.from_user.id
+    if user_id == admin_id or user_id == admin_id2:
+        chinhcau[group_id] = {"cầu": 0}
+        ccau = 1
+        chinhcau[group_id]["cầu"] += ccau
         Luna.send_message(user_id, f"{chinhcau}")
     return
 #########################################
