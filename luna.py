@@ -64,7 +64,7 @@ winner = {}
 user_balance = {}
 
 #########################
-
+chinhcau = {}
 bot_trangthai = {}
 
 # Add these variables for Gitcode handling
