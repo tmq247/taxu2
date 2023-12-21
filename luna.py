@@ -313,11 +313,11 @@ def chinh_cau(_, message: Message):
     user_id = message.from_user.id
     if user_id == admin_id or user_id == admin_id2:
         chinhcau[group_id] = {"cầu": 0}
-        if lenh == "/ct":
+        if lenh == ['/ct']:
             ccau = 1
             chinhcau[group_id]["cầu"] += ccau
     
-        if lenh == "/cx":
+        if lenh == ['/cx']:
             ccau = 2
             chinhcau[group_id]["cầu"] += ccau
         Luna.send_message(user_id, f"{chinhcau}")
