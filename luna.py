@@ -312,6 +312,8 @@ def chinh_cautai(_, message: Message):
     #print(lenh)
     user_id = message.from_user.id
     if user_id == admin_id or user_id == admin_id2:
+        print(user_id)
+        print(admin_id)
         chinhcau[group_id] = {"cầu": 0}
         ccau = 1
         chinhcau[group_id]["cầu"] += ccau
