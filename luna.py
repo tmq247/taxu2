@@ -310,10 +310,11 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
 def chinh_cautai(_, message: Message):
     #lenh = message.text.split()
     #print(lenh)
+    print(user_id)
+    print(admin_id)
     user_id = message.from_user.id
     if user_id == admin_id or user_id == admin_id2:
-        print(user_id)
-        print(admin_id)
+        
         chinhcau[group_id] = {"cầu": 0}
         ccau = 1
         chinhcau[group_id]["cầu"] += ccau
