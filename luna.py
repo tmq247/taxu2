@@ -297,6 +297,21 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
         reply_markup = InlineKeyboardMarkup(soicau)
         Luna.send_message(group_id, f"Người chơi chưa khởi động Luna, vui lòng khởi động bot và thử lại. \nHÃY VÀO 2 BOT BÊN DƯỚI, KHỞI ĐỘNG BOT ĐỂ CÓ THỂ CHƠI GAME.", reply_markup=reply_markup)
 
+#####################################
+@Luna.on_message(filters.command("chinhcau"))
+def chinh_cau(_, message: Message):
+    lenh, cau = message.text.split(" ", 2)
+    chinhcau[group_id] = {"cầu": 0}
+    if cau == "tai":
+        ccau = 1
+        chinhcau[group_id]["cầu"] += ccau
+
+    if cau == "xiu":
+        ccau = 2
+        chinhcau[group_id]["cầu"] += ccau
+    Luna.send_message(group_id, f"{chinhcau}")
+#########################################
+
 # Function to start the dice game
 def start_game(message, grid):
     #load_balance_from_file()
@@ -322,9 +337,50 @@ def start_game(message, grid):
     text4 = Luna.send_message(group_id, text)
     idtext4 = text4.id
     time.sleep(3)  # Simulating dice rolling
-    
-    result = [send_dice(group_id) for _ in range(3)]
+    ##########################################
+    response = xx.send_dice(group_id, "🎲")
+    response2 = xx.send_dice(group_id, "🎲")
+    response3 = xx.send_dice(group_id, "🎲")
+    tx = response.dice.value
+    tx2 = response2.dice.value
+    tx3 = response3.dice.value
+    result = [tx, tx2, tx3]
     total_score = sum(result)
+
+    if len(chinhcau) !=0 and chinhcau[group_id]["cầu"] == 2:
+        print("xỉu")
+        while total_score >= 11:
+            response.delete()
+            response2.delete()
+            response3.delete()
+            response = xx.send_dice(group_id, "🎲")
+            response2 = xx.send_dice(group_id, "🎲")
+            response3 = xx.send_dice(group_id, "🎲")
+            tx = response.dice.value
+            tx2 = response2.dice.value
+            tx3 = response3.dice.value
+            result = [tx, tx2, tx3]
+            total_score = sum(result)
+
+    elif len(chinhcau) != 0 and chinhcau[group_id]["cầu"] == 1:
+        print("tài")
+        while total_score < 11:
+            response.delete()
+            response2.delete()
+            response3.delete()
+            response = xx.send_dice(group_id, "🎲")
+            response2 = xx.send_dice(group_id, "🎲")
+            response3 = xx.send_dice(group_id, "🎲")
+            tx = response.dice.value
+            tx2 = response2.dice.value
+            tx3 = response3.dice.value
+            result = [tx, tx2, tx3]
+            total_score = sum(result)
+
+    chinhcau.clear()
+    ########################################################
+    #result = [send_dice(group_id) for _ in range(3)]
+    #total_score = sum(result)
     kq = f"➤KẾT QUẢ XX: {' + '.join(str(x) for x in result)} = {total_score} điểm {calculate_tai_xiu(total_score)}\n"
     kq1 = f"➤KẾT QUẢ XX: {' + '.join(str(x) for x in result)} = {total_score} điểm {calculate_tai_xiu(total_score)}\n"
     ls_cau(result)
@@ -374,7 +430,11 @@ Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
     user_bets.clear()
     winner.clear()
     luu_cau.clear()
-    time.sleep(10)
+    time.sleep(3)
+    response.delete()
+    response2.delete()
+    response3.delete()
+    time.sleep(7)
     mo_game.clear()
     Luna.delete_messages(group_id, idtext4)
 
