@@ -321,6 +321,8 @@ def chinh_cautai(_, message: Message):
         print(chinhcau)
         Luna.send_message(user_id, f"{chinhcau}")
 
+    print(chinhcau)
+
 @Luna.on_message(filters.command("cx"))
 def chinh_cauxiu(_, message: Message):
     #lenh = message.text.split()
