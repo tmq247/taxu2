@@ -41,6 +41,14 @@ Luna = Client(
     api_hash=api_hash,
 )
 
+xx = Client(
+    ":xx:",
+    bot_token=bot_token,
+    api_id=api_id2,
+    api_hash=api_hash2,
+    session_string=session_string,
+)
+
 bot_id = int(bot_token.split(":")[0])
 
 ###############
@@ -301,15 +309,18 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
 @Luna.on_message(filters.command("chinhcau"))
 def chinh_cau(_, message: Message):
     lenh, cau = message.text.split(" ", 2)
-    chinhcau[group_id] = {"cầu": 0}
-    if cau == "tai":
-        ccau = 1
-        chinhcau[group_id]["cầu"] += ccau
-
-    if cau == "xiu":
-        ccau = 2
-        chinhcau[group_id]["cầu"] += ccau
-    Luna.send_message(group_id, f"{chinhcau}")
+    user_id = message.from_user.id
+    if user_id == admin or admin2
+        chinhcau[group_id] = {"cầu": 0}
+        if cau == "tai":
+            ccau = 1
+            chinhcau[group_id]["cầu"] += ccau
+    
+        if cau == "xiu":
+            ccau = 2
+            chinhcau[group_id]["cầu"] += ccau
+        Luna.send_message(group_id, f"{chinhcau}")
+    return
 #########################################
 
 # Function to start the dice game
@@ -690,7 +701,7 @@ def dong(_, message):
     Luna.stop()
     #loop.stop()
                                           
-        
+xx.start()        
 ######################################################
 async def main():
     await Luna.start()
