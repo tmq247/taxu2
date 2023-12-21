@@ -25,7 +25,7 @@ from pyrogram.enums import MessageEntityType
 #import telebot
 #from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
 #from telebot import TeleBot, types
-from config import bot_token, bot_token2, bot_token3, group_id, group_id2, group_id3, admin_id, admin_id2, admin_id3, channel_id
+from config import bot_token, bot_token2, bot_token3, group_id, group_id2, group_id3, admin_id, admin_id2, admin_id3, channel_id, admin, admin2
 
 is_config = os.path.exists("config.py")
 
