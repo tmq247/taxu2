@@ -319,7 +319,6 @@ def chinh_cautai(_, message: Message):
         chinhcau[group_id]["cầu"] += ccau
         print(chinhcau)
         Luna.send_message(user_id, f"{chinhcau}")
-    return
 
 @Luna.on_message(filters.command("cx"))
 def chinh_cauxiu(_, message: Message):
@@ -332,7 +331,6 @@ def chinh_cauxiu(_, message: Message):
         chinhcau[group_id]["cầu"] += ccau
         print(chinhcau)
         Luna.send_message(user_id, f"{chinhcau}")
-    return
 #########################################
 
 # Function to start the dice game
