@@ -408,12 +408,12 @@ def start_game(message, grid):
             Luna.forward_messages(channel_id, group_id4, response3.id)
 
     else:
-        Luna.forward_messages(group_id, admin_id, response.id)
-        Luna.forward_messages(group_id, admin_id, response2.id)
-        Luna.forward_messages(group_id, admin_id, response3.id)
-        Luna.forward_messages(channel_id, admin_id, response.id)
-        Luna.forward_messages(channel_id, admin_id, response2.id)
-        Luna.forward_messages(channel_id, admin_id, response3.id)
+        fw = Luna.forward_messages(group_id, admin_id, response.id)
+        fw2 = Luna.forward_messages(group_id, admin_id, response2.id)
+        fw3 = Luna.forward_messages(group_id, admin_id, response3.id)
+        fw4 = Luna.forward_messages(channel_id, admin_id, response.id)
+        fw5 = Luna.forward_messages(channel_id, admin_id, response2.id)
+        fw6 = Luna.forward_messages(channel_id, admin_id, response3.id)
         
     chinhcau.clear()
     ########################################################
