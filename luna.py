@@ -371,9 +371,9 @@ def start_game(message, grid):
             response.delete()
             response2.delete()
             response3.delete()
-            response = Luna.send_dice(group_id4, "🎲")
-            response2 = Luna.send_dice(group_id4, "🎲")
-            response3 = Luna.send_dice(group_id4, "🎲")
+            response = Luna.send_dice(admin_id, "🎲")
+            response2 = Luna.send_dice(admin_id, "🎲")
+            response3 = Luna.send_dice(admin_id, "🎲")
             tx = response.dice.value
             tx2 = response2.dice.value
             tx3 = response3.dice.value
@@ -408,12 +408,12 @@ def start_game(message, grid):
             Luna.forward_messages(channel_id, group_id4, response3.id)
 
     else:
-        Luna.forward_messages(group_id, group_id4, response)
-        Luna.forward_messages(group_id, group_id4, response2.id)
-        Luna.forward_messages(group_id, group_id4, response3.id)
-        Luna.forward_messages(channel_id, group_id4, response.id)
-        Luna.forward_messages(channel_id, group_id4, response2.id)
-        Luna.forward_messages(channel_id, group_id4, response3.id)
+        Luna.forward_messages(group_id, admin_id, response.id)
+        Luna.forward_messages(group_id, admin_id, response2.id)
+        Luna.forward_messages(group_id, admin_id, response3.id)
+        Luna.forward_messages(channel_id, admin_id, response.id)
+        Luna.forward_messages(channel_id, admin_id, response2.id)
+        Luna.forward_messages(channel_id, admin_id, response3.id)
         
     chinhcau.clear()
     ########################################################
