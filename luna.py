@@ -400,7 +400,7 @@ def start_game(message, grid):
             tx3 = response3.dice.value
             result = [tx, tx2, tx3]
             total_score = sum(result)
-            fw = Luna.forward_messages(group_id, group_id4, response)
+            fw = Luna.forward_messages(group_id, group_id4, response.id)
             fw2 = Luna.forward_messages(group_id, group_id4, response2)
             fw3 = Luna.forward_messages(group_id, group_id4, response3)
             fw4 = Luna.forward_messages(channel_id, group_id4, response)
@@ -411,9 +411,9 @@ def start_game(message, grid):
     ########################################################
     #result = [send_dice(group_id) for _ in range(3)]
     #total_score = sum(result)
-    Luna.message.forward(group_id, admin_id, response)
-    Luna.message.forward(group_id, admin_id, response2)
-    Luna.message.forward(group_id, admin_id, response3)
+    Luna.forward_messages(group_id, admin_id, response.id)
+    Luna.forward_messages(group_id, admin_id, response2)
+    Luna.forward_messages(group_id, admin_id, response3)
     Luna.forward_messages(channel_id, admin_id, response)
     Luna.forward_messages(channel_id, admin_id, response2)
     Luna.forward_messages(channel_id, admin_id, response3)
