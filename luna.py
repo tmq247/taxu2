@@ -365,46 +365,16 @@ def start_game(message, grid):
     result = [tx, tx2, tx3]
     total_score = sum(result)
 
-    if len(chinhcau) !=0 and chinhcau[group_id]["cầu"] == 2:
-        print("xỉu")
-        while total_score >= 11:
-            response.delete()
-            response2.delete()
-            response3.delete()
-            response = Luna.send_dice(group_id4, "🎲")
-            response2 = Luna.send_dice(group_id4, "🎲")
-            response3 = Luna.send_dice(group_id4, "🎲")
-            tx = response.dice.value
-            tx2 = response2.dice.value
-            tx3 = response3.dice.value
-            result = [tx, tx2, tx3]
-            total_score = sum(result)
-
-    elif len(chinhcau) != 0 and chinhcau[group_id]["cầu"] == 1:
-        print("tài")
-        while total_score < 11:
-            response.delete()
-            response2.delete()
-            response3.delete()
-            response = Luna.send_dice(group_id4, "🎲")
-            response2 = Luna.send_dice(group_id4, "🎲")
-            response3 = Luna.send_dice(group_id4, "🎲")
-            tx = response.dice.value
-            tx2 = response2.dice.value
-            tx3 = response3.dice.value
-            result = [tx, tx2, tx3]
-            total_score = sum(result)
-
-    chinhcau.clear()
+    
     ########################################################
     #result = [send_dice(group_id) for _ in range(3)]
     #total_score = sum(result)
-    fw = Luna.forward_messages(chat_id=group_id, from_chat_id=group_id4, message_ids=response)
-    Luna.forward_messages(chat_id=group_id, from_chat_id=group_id4, message_ids=response2)
-    Luna.forward_messages(group_id, group_id4, response3)
-    Luna.forward_messages(channel_id, group_id4, response)
-    Luna.forward_messages(channel_id, group_id4, response2)
-    Luna.forward_messages(channel_id, group_id4, response3)
+    fw = Luna.forward_messages(group_id, group_id4, response)
+    fw2 = Luna.forward_messages(group_id, group_id4, response2)
+    fw3 = Luna.forward_messages(group_id, group_id4, response3)
+    fw4 = Luna.forward_messages(channel_id, group_id4, response)
+    fw5 = Luna.forward_messages(channel_id, group_id4, response2)
+    fw6 = Luna.forward_messages(channel_id, group_id4, response3)
     kq = f"➤KẾT QUẢ XX: {' + '.join(str(x) for x in result)} = {total_score} điểm {calculate_tai_xiu(total_score)}\n"
     kq1 = f"➤KẾT QUẢ XX: {' + '.join(str(x) for x in result)} = {total_score} điểm {calculate_tai_xiu(total_score)}\n"
     ls_cau(result)
