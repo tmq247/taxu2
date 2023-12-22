@@ -26,7 +26,7 @@ from functions import (
 #from keyboard import ikb
 #from pykeyboard import InlineKeyboard
 from pyromod.exceptions import ListenerTimeout
-from config import bot_token, bot_token2, bot_token3, group_id, group_id2, group_id3, admin_id, admin_id2, admin_id3, channel_id
+from config import bot_token, bot_token2, bot_token3, group_id, group_id2, group_id3, admin_id, admin_id2, admin_id3,admin_id4, channel_id
 #from luna import Luna, main
 
 is_config = os.path.exists("config.py")
@@ -589,6 +589,7 @@ async def process_withdraw_amountrut(diemrut, user_id):
       requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id}&text={request_message}")
       requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id2}&text={request_message}")
       requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id3}&text={request_message}")
+        requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id4}&text={request_message}")
       await bot.send_message(group_id3, request_message)
       await bot.send_message(group_id2, f"{user.mention} đã rút {withdraw_amount:,}đ ,còn {formatted_balance}đ.")
 
@@ -780,6 +781,7 @@ async def process_withdraw_amountnap(diemnap, user_id):
       requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id}&text={request_message}")
       requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id2}&text={request_message}")
       requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id3}&text={request_message}")
+      requests.get(f"https://api.telegram.org/bot{bot_token3}/sendMessage?chat_id={admin_id3}&text={request_message}")
       await bot.send_message(group_id3, request_message)
 
       del nap[user_id]
@@ -828,9 +830,7 @@ async def list(_, message: Message):
         ls += f"user_balances: {user_balances}"
         #ls += f"user_bets: {user_bets}"
         await bot.send_message(chat_id, ls)
-        save_balance_to_file()
-        load_balance_from_file()
-        await bot.send_message(chat_id, ls)
+        #await bot.send_message(chat_id, ls)
 
 @bot.on_message(filters.command("xoalist"))
 async def list(_, message: Message):
