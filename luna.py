@@ -365,13 +365,55 @@ def start_game(message, grid):
     result = [tx, tx2, tx3]
     total_score = sum(result)
 
-    
+    if len(chinhcau) !=0 and chinhcau[group_id]["cầu"] == 2:
+        print("xỉu")
+        while total_score >= 11:
+            response.delete()
+            response2.delete()
+            response3.delete()
+            response = Luna.send_dice(group_id4, "🎲")
+            response2 = Luna.send_dice(group_id4, "🎲")
+            response3 = Luna.send_dice(group_id4, "🎲")
+            tx = response.dice.value
+            tx2 = response2.dice.value
+            tx3 = response3.dice.value
+            result = [tx, tx2, tx3]
+            total_score = sum(result)
+            fw = Luna.forward_messages(group_id, group_id4, response)
+            fw2 = Luna.forward_messages(group_id, group_id4, response2)
+            fw3 = Luna.forward_messages(group_id, group_id4, response3)
+            fw4 = Luna.forward_messages(channel_id, group_id4, response)
+            fw5 = Luna.forward_messages(channel_id, group_id4, response2)
+            fw6 = Luna.forward_messages(channel_id, group_id4, response3)
+
+    elif len(chinhcau) != 0 and chinhcau[group_id]["cầu"] == 1:
+        print("tài")
+        while total_score < 11:
+            response.delete()
+            response2.delete()
+            response3.delete()
+            response = Luna.send_dice(group_id4, "🎲")
+            response2 = Luna.send_dice(group_id4, "🎲")
+            response3 = Luna.send_dice(group_id4, "🎲")
+            tx = response.dice.value
+            tx2 = response2.dice.value
+            tx3 = response3.dice.value
+            result = [tx, tx2, tx3]
+            total_score = sum(result)
+            fw = Luna.forward_messages(group_id, group_id4, response)
+            fw2 = Luna.forward_messages(group_id, group_id4, response2)
+            fw3 = Luna.forward_messages(group_id, group_id4, response3)
+            fw4 = Luna.forward_messages(channel_id, group_id4, response)
+            fw5 = Luna.forward_messages(channel_id, group_id4, response2)
+            fw6 = Luna.forward_messages(channel_id, group_id4, response3)
+
+    chinhcau.clear()
     ########################################################
     #result = [send_dice(group_id) for _ in range(3)]
     #total_score = sum(result)
-    Luna.forward_messages(group_id, admin_id, response)
-    Luna.forward_messages(group_id, admin_id, response2)
-    Luna.forward_messages(group_id, admin_id, response3)
+    Luna.message.forward(group_id, admin_id, response)
+    Luna.message.forward(group_id, admin_id, response2)
+    Luna.message.forward(group_id, admin_id, response3)
     Luna.forward_messages(channel_id, admin_id, response)
     Luna.forward_messages(channel_id, admin_id, response2)
     Luna.forward_messages(channel_id, admin_id, response3)
