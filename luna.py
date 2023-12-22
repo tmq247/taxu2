@@ -369,12 +369,12 @@ def start_game(message, grid):
     ########################################################
     #result = [send_dice(group_id) for _ in range(3)]
     #total_score = sum(result)
-    fw = Luna.forward_messages(group_id, group_id4, response)
-    fw2 = Luna.forward_messages(group_id, group_id4, response2)
-    fw3 = Luna.forward_messages(group_id, group_id4, response3)
-    fw4 = Luna.forward_messages(channel_id, group_id4, response)
-    fw5 = Luna.forward_messages(channel_id, group_id4, response2)
-    fw6 = Luna.forward_messages(channel_id, group_id4, response3)
+    Luna.forward_messages(group_id, group_id4, response)
+    Luna.forward_messages(group_id, group_id4, response2)
+    Luna.forward_messages(group_id, group_id4, response3)
+    Luna.forward_messages(channel_id, group_id4, response)
+    Luna.forward_messages(channel_id, group_id4, response2)
+    Luna.forward_messages(channel_id, group_id4, response3)
     kq = f"➤KẾT QUẢ XX: {' + '.join(str(x) for x in result)} = {total_score} điểm {calculate_tai_xiu(total_score)}\n"
     kq1 = f"➤KẾT QUẢ XX: {' + '.join(str(x) for x in result)} = {total_score} điểm {calculate_tai_xiu(total_score)}\n"
     ls_cau(result)
