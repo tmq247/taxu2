@@ -399,10 +399,12 @@ def start_game(message, grid):
     ########################################################
     #result = [send_dice(group_id) for _ in range(3)]
     #total_score = sum(result)
-    Luna.forward_messages(group_id, group_id4, [response, response2, response3])
-    #Luna.forward_messages(group_id, group_id4, response2)
-    #Luna.forward_messages(group_id, group_id4, response3)
-    Luna.forward_messages(channel_id, group_id4, [response, response2, response3])
+    Luna.forward_messages(group_id, group_id4, response)
+    Luna.forward_messages(group_id, group_id4, response2)
+    Luna.forward_messages(group_id, group_id4, response3)
+    Luna.forward_messages(channel_id, group_id4, response)
+    Luna.forward_messages(channel_id, group_id4, response2)
+    Luna.forward_messages(channel_id, group_id4, response3)
     kq = f"➤KẾT QUẢ XX: {' + '.join(str(x) for x in result)} = {total_score} điểm {calculate_tai_xiu(total_score)}\n"
     kq1 = f"➤KẾT QUẢ XX: {' + '.join(str(x) for x in result)} = {total_score} điểm {calculate_tai_xiu(total_score)}\n"
     ls_cau(result)
@@ -453,9 +455,9 @@ Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
     winner.clear()
     luu_cau.clear()
     time.sleep(5)
-    fw.delete()
-    fw2.delete()
-    fw3.delete()
+    response.delete()
+    response2.delete()
+    response3.delete()
     time.sleep(7)
     mo_game.clear()
     idtext4.delete()
