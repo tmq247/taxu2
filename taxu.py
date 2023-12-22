@@ -600,7 +600,8 @@ async def process_withdraw_amountrut(diemrut, user_id):
 📬 Rút điểm thành công!
 ⏺ Số điểm rút: {withdraw_amount:,} VNĐ
 📈 Số điểm còn lại: {formatted_balance}
-yêu cầu sẽ được sử lý trong vòng 15 phút. Xin cảm ơn!!!
+Yêu cầu sẽ được sử lý trong vòng 15 phút. Xin cảm ơn!!!
+Nếu có thắc mắc xin liên hệ CSKH @Tuyetxinhxiu để đc giải đáp.
           """
       await bot.send_message(user_id, user_notification)
       await bot.send_message(group_id, f"""{user.mention} đã rút điểm thành công. Xin chúc mừng🥳🥳🥳 (yêu cầu sẽ được sử lý trong vòng 15 phút )""")
@@ -763,9 +764,11 @@ async def process_withdraw_amountnap(diemnap, user_id):
 🔊Min Nạp: 10.000k Min Rút: 100.000k
 🔊Min Nạp: 10.000 - 3.000.000🔚
 🔊Vui lòng ghi đúng nội dung nạp điểm.🔚
-🔊Vui lòng chụp lại bill.🔚
+🔊Vui lòng chụp lại bill và gửi cho @Tuyetxinhxiu.🔚
 🔊Không Hỗ Trợ Lỗi Nội Dung.🔚
 🔊NẠP NHANH BẰNG MÃ QR PHÍA BÊN DƯỚI NHÉ 🔚
+
+Nếu có thắc mắc vui lòng liên hệ CSKH @Tuyetxinhxiu.
 
 ***Yêu cầu sẽ được sử lý trong vòng 15 phút sau khi chuyển khoản.*** 
       """
