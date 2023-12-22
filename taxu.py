@@ -861,7 +861,7 @@ def on_exit():
     save_balance_to_file()
     request_message = f"Bot Điểm đã tắt"
     #bot.send_message(group_id3, "Bot điểm đã tắt")
-    requests.get(f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={group_id3}&text={request_message}")
+    requests.get(f"https://api.telegram.org/bot{bot_token2}/sendMessage?chat_id={group_id3}&text={request_message}")
     print("Bot Điểm đã tắt")
 
 # Xử lý khi bot bị tắt hoặc lỗi
