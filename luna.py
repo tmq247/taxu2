@@ -292,7 +292,7 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
             except Exception as e:
                 print("Error fetching user info:", e)
                 Luna.send_message(group_id3, f"Lỗi:{e}")
-                nut = [[InlineKeyboardButton("Bot GAME", url="https://t.me/alltowin_bot?start=hi"),],]
+                nut = [[InlineKeyboardButton("Bot GAME", url="https://t.me/alltowin_bot?start"),],]
                 reply_markup = InlineKeyboardMarkup(nut)
                 Luna.send_message(group_id, f"Lỗi:{ten_ncuoc.mention} chưa khởi động Bot, hãy bấm nút bên dưới và đặt cược lại.",reply_markup=reply_markup)
 
