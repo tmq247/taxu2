@@ -222,14 +222,14 @@ def handle_message(_, message: Message):
     print(bot_trangthai,2)
     if chat_id != group_id:
         return Luna.send_message(chat_id, "Vào nhóm t.me/sanhallwin để chơi GAME.")
-    if user_id not in bot_trangthai:
-        nut = [
-        [
-            InlineKeyboardButton("Bot Nạp - Rút", url="https://t.me/diemallwin_bot?start=hi"),
-            InlineKeyboardButton("Bot GAME", url="https://t.me/alltowin_bot?start=hi"),
-        ],]
-        reply_markup = InlineKeyboardMarkup(nut)
-        return Luna.send_message(chat_id, "Lỗi!!! Vui lòng bấm vào cả 2 nút bên dưới và thử lại.", reply_markup=reply_markup)
+    #if user_id not in bot_trangthai:
+        #nut = [
+        #[
+        #    InlineKeyboardButton("Bot Nạp - Rút", url="https://t.me/diemallwin_bot?start=hi"),
+        #    InlineKeyboardButton("Bot GAME", url="https://t.me/alltowin_bot?start=hi"),
+        #],]
+        #reply_markup = InlineKeyboardMarkup(nut)
+        #return Luna.send_message(chat_id, "Lỗi!!! Vui lòng bấm vào cả 2 nút bên dưới và thử lại.", reply_markup=reply_markup)
     if len(mo_game) > 0 and mo_game[grid]['tthai'] == 2:
         return Luna.send_message(chat_id, "Đợi 10s để đặt cược ván tiếp theo.")
     
@@ -283,7 +283,7 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
                 request_message = f"""{diemcuoc} \nCược đã được chấp nhận."""
                 #requests.get(f"https://api.telegram.org/bot{bot_token2}/sendMessage?chat_id={user_id}&text={request_message}")
                 #requests.get(f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={group_id2}&text={text}")
-                Luna.send_message(user_id, request_message)
+                xx.send_message(user_id, request_message)
                 Luna.send_message(group_id, request_message)
                 Luna.send_message(group_id2, text)
                 save_balance_to_file()
@@ -355,9 +355,10 @@ def start_game(message, grid):
     idtext4 = text4.id
     time.sleep(3)  # Simulating dice rolling
     ##########################################
-    response = xx.send_dice(group_id, "🎲")
-    response2 = xx.send_dice(group_id, "🎲")
-    response3 = xx.send_dice(group_id, "🎲")
+    groupxx = "-1002066845150"
+    response = Luna.send_dice(groupxx, "🎲")
+    response2 = Luna.send_dice(groupxx, "🎲")
+    response3 = Luna.send_dice(groupxx, "🎲")
     tx = response.dice.value
     tx2 = response2.dice.value
     tx3 = response3.dice.value
@@ -370,9 +371,9 @@ def start_game(message, grid):
             response.delete()
             response2.delete()
             response3.delete()
-            response = xx.send_dice(group_id, "🎲")
-            response2 = xx.send_dice(group_id, "🎲")
-            response3 = xx.send_dice(group_id, "🎲")
+            response = Luna.send_dice(groupxx, "🎲")
+            response2 = Luna.send_dice(groupxx, "🎲")
+            response3 = Luna.send_dice(groupxx, "🎲")
             tx = response.dice.value
             tx2 = response2.dice.value
             tx3 = response3.dice.value
@@ -385,9 +386,9 @@ def start_game(message, grid):
             response.delete()
             response2.delete()
             response3.delete()
-            response = xx.send_dice(group_id, "🎲")
-            response2 = xx.send_dice(group_id, "🎲")
-            response3 = xx.send_dice(group_id, "🎲")
+            response = Luna.send_dice(groupxx, "🎲")
+            response2 = Luna.send_dice(groupxx, "🎲")
+            response3 = Luna.send_dice(groupxx, "🎲")
             tx = response.dice.value
             tx2 = response2.dice.value
             tx3 = response3.dice.value
@@ -398,6 +399,10 @@ def start_game(message, grid):
     ########################################################
     #result = [send_dice(group_id) for _ in range(3)]
     #total_score = sum(result)
+    fw = Luna.forward_messages(group_id, groupxx, response)
+    fw2 = Luna.forward_messages(group_id, groupxx, response2)
+    fw3 = Luna.forward_messages(group_id, groupxx, response3)
+    fw4 = Luna.forward_messages(channel_id, groupxx, [response, response2, response3])
     kq = f"➤KẾT QUẢ XX: {' + '.join(str(x) for x in result)} = {total_score} điểm {calculate_tai_xiu(total_score)}\n"
     kq1 = f"➤KẾT QUẢ XX: {' + '.join(str(x) for x in result)} = {total_score} điểm {calculate_tai_xiu(total_score)}\n"
     ls_cau(result)
@@ -434,7 +439,7 @@ def start_game(message, grid):
         kq1 += f"""{user_ids.mention} thắng {diem:,} điểm.Có {balance:,} điểm\n"""
         #kq1 += f"{user_id1} có {balance:,} điểm"
         #requests.get(f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={user_id}&text={kq1}")
-        Luna.send_message(user_id, kq)
+        xx.send_message(user_id, kq)
         
     kq += f"""
 Tổng thắng: {total_win:,}đ
@@ -447,13 +452,13 @@ Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
     user_bets.clear()
     winner.clear()
     luu_cau.clear()
-    time.sleep(3)
-    response.delete()
-    response2.delete()
-    response3.delete()
+    time.sleep(5)
+    fw.delete()
+    fw2.delete()
+    fw3.delete()
     time.sleep(7)
     mo_game.clear()
-    Luna.delete_messages(group_id, idtext4)
+    idtext4.delete()
 
 @Luna.on_message(filters.command("diem"))
 async def check_balance(_, message: Message):
@@ -510,7 +515,7 @@ def ls_cau(result):
 
 @Luna.on_message(filters.command("soicau"))
 def soicau_taixiu(_, message: Message):
-    xem_bot()
+    #xem_bot()
     chat_id = message.chat.id
     #load_cau_from_file()
     soicau = [
@@ -533,11 +538,11 @@ def soicau_taixiu(_, message: Message):
 def show_main_menu(_, message: Message):
     user_id = message.from_user.id
     #load_balance_from_file()
-    if user_id not in bot_trangthai and filters.private:
-        mo_bot(user_id)
-        print(bot_trangthai)
+    #if user_id not in bot_trangthai and filters.private:
+        #mo_bot(user_id)
+        #print(bot_trangthai)
   # Check if the user is already in the user_balance dictionary
-    xem_bot()
+    #xem_bot()
     if user_id not in user_balance:
         user_balance[user_id] = 0  # Set initial balance to 0 for new users
         save_balance_to_file()  # Save user balances to the text file
