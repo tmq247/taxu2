@@ -218,7 +218,7 @@ def handle_message(_, message: Message):
     #user_id = Luna.get_users(from_user).id
     grid = chat_id
     print(bot_trangthai,1)
-    xem_bot()
+    #xem_bot()
     print(bot_trangthai,2)
     if chat_id != group_id:
         return Luna.send_message(chat_id, "Vào nhóm t.me/sanhallwin để chơi GAME.")
@@ -292,7 +292,9 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
             except Exception as e:
                 print("Error fetching user info:", e)
                 Luna.send_message(group_id3, f"Lỗi:{e}")
-                Luna.send_message(group_id, f"Lỗi:{ten_ncuoc.mention} chưa khởi động Bot @alltowin_bot, hãy khởi động bot và đặt cược lại.")
+                nut = [[InlineKeyboardButton("Bot GAME", url="https://t.me/alltowin_bot?start=hi"),],]
+                reply_markup = InlineKeyboardMarkup(nut)
+                Luna.send_message(group_id, f"Lỗi:{ten_ncuoc.mention} chưa khởi động Bot, hãy bấm nút bên dưới và đặt cược lại.",reply_markup=reply_markup)
 
         else:
             Luna.send_message(group_id, "Không đủ số dư để đặt cược. Vui lòng kiểm tra lại số dư của bạn.")
