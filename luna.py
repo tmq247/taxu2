@@ -616,9 +616,7 @@ def listdiem(_, message: Message):
         ls = f"user_balance: {user_balance}"
         #ls += f"bot_trangthai: {bot_trangthai}"
         Luna.send_message(chat_id, ls)
-        save_balance_to_file()
-        load_balance_from_file()
-        Luna.send_message(chat_id, ls)
+        #Luna.send_message(chat_id, ls)
     
 
 @Luna.on_message(filters.command("topdiem"))
