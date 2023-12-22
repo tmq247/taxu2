@@ -379,12 +379,12 @@ def start_game(message, grid):
             tx3 = response3.dice.value
             result = [tx, tx2, tx3]
             total_score = sum(result)
-            #fw = Luna.forward_messages(group_id, xx_id, response.id)
-            #fw2 = Luna.forward_messages(group_id, xx_id, response2.id)
-            #fw3 = Luna.forward_messages(group_id, xx_id, response3.id)
-            #Luna.forward_messages(channel_id, xx_id, response.id)
-            #Luna.forward_messages(channel_id, xx_id, response2.id)
-            #Luna.forward_messages(channel_id, xx_id, response3.id)
+        fw = Luna.forward_messages(group_id, xx_id, response.id)
+        fw2 = Luna.forward_messages(group_id, xx_id, response2.id)
+        fw3 = Luna.forward_messages(group_id, xx_id, response3.id)
+        Luna.forward_messages(channel_id, xx_id, response.id)
+        Luna.forward_messages(channel_id, xx_id, response2.id)
+        Luna.forward_messages(channel_id, xx_id, response3.id)
 
     elif len(chinhcau) != 0 and chinhcau[group_id]["cầu"] == 1:
         print("tài")
@@ -400,14 +400,20 @@ def start_game(message, grid):
             tx3 = response3.dice.value
             result = [tx, tx2, tx3]
             total_score = sum(result)
+        fw = Luna.forward_messages(group_id, xx_id, response.id)
+        fw2 = Luna.forward_messages(group_id, xx_id, response2.id)
+        fw3 = Luna.forward_messages(group_id, xx_id, response3.id)
+        Luna.forward_messages(channel_id, xx_id, response.id)
+        Luna.forward_messages(channel_id, xx_id, response2.id)
+        Luna.forward_messages(channel_id, xx_id, response3.id)
 
-   
-    fw = Luna.forward_messages(group_id, xx_id, response.id)
-    fw2 = Luna.forward_messages(group_id, xx_id, response2.id)
-    fw3 = Luna.forward_messages(group_id, xx_id, response3.id)
-    Luna.forward_messages(channel_id, xx_id, response.id)
-    Luna.forward_messages(channel_id, xx_id, response2.id)
-    Luna.forward_messages(channel_id, xx_id, response3.id)
+    else:
+        fw = Luna.forward_messages(group_id, xx_id, response.id)
+        fw2 = Luna.forward_messages(group_id, xx_id, response2.id)
+        fw3 = Luna.forward_messages(group_id, xx_id, response3.id)
+        Luna.forward_messages(channel_id, xx_id, response.id)
+        Luna.forward_messages(channel_id, xx_id, response2.id)
+        Luna.forward_messages(channel_id, xx_id, response3.id)
         
     chinhcau.clear()
     ########################################################
