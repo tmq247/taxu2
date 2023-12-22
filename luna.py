@@ -407,13 +407,13 @@ def start_game(message, grid):
             Luna.forward_messages(channel_id, group_id4, response2.id)
             Luna.forward_messages(channel_id, group_id4, response3.id)
 
-    else:
-        Luna.forward_messages(group_id, group_id4, response.id)
-        Luna.forward_messages(group_id, group_id4, response2.id)
-        Luna.forward_messages(group_id, group_id4, response3.id)
-        Luna.forward_messages(channel_id, group_id4, response.id)
-        Luna.forward_messages(channel_id, group_id4, response2.id)
-        Luna.forward_messages(channel_id, group_id4, response3.id)
+    #else:
+    Luna.forward_messages(group_id, group_id4, response.id)
+    Luna.forward_messages(group_id, group_id4, response2.id)
+    Luna.forward_messages(group_id, group_id4, response3.id)
+    Luna.forward_messages(channel_id, group_id4, response.id)
+    Luna.forward_messages(channel_id, group_id4, response2.id)
+    Luna.forward_messages(channel_id, group_id4, response3.id)
         
     chinhcau.clear()
     ########################################################
