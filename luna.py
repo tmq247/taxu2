@@ -25,7 +25,7 @@ from pyrogram.enums import MessageEntityType
 #import telebot
 #from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
 #from telebot import TeleBot, types
-from config import bot_token, bot_token2, bot_token3, group_id, group_id2, group_id3, admin_id, admin_id2, admin_id3, channel_id, admin, admin2
+from config import bot_token, bot_token2, bot_token3, group_id, group_id2, group_id3, group_id4, admin_id, admin_id2, admin_id3, channel_id, admin, admin2
 
 is_config = os.path.exists("config.py")
 
@@ -355,10 +355,10 @@ def start_game(message, grid):
     idtext4 = text4.id
     time.sleep(3)  # Simulating dice rolling
     ##########################################
-    groupxx = "-1002066845150"
-    response = Luna.send_dice(groupxx, "🎲")
-    response2 = Luna.send_dice(groupxx, "🎲")
-    response3 = Luna.send_dice(groupxx, "🎲")
+    
+    response = Luna.send_dice(group_id4, "🎲")
+    response2 = Luna.send_dice(group_id4, "🎲")
+    response3 = Luna.send_dice(group_id4, "🎲")
     tx = response.dice.value
     tx2 = response2.dice.value
     tx3 = response3.dice.value
@@ -371,9 +371,9 @@ def start_game(message, grid):
             response.delete()
             response2.delete()
             response3.delete()
-            response = Luna.send_dice(groupxx, "🎲")
-            response2 = Luna.send_dice(groupxx, "🎲")
-            response3 = Luna.send_dice(groupxx, "🎲")
+            response = Luna.send_dice(group_id4, "🎲")
+            response2 = Luna.send_dice(group_id4, "🎲")
+            response3 = Luna.send_dice(group_id4, "🎲")
             tx = response.dice.value
             tx2 = response2.dice.value
             tx3 = response3.dice.value
@@ -386,9 +386,9 @@ def start_game(message, grid):
             response.delete()
             response2.delete()
             response3.delete()
-            response = Luna.send_dice(groupxx, "🎲")
-            response2 = Luna.send_dice(groupxx, "🎲")
-            response3 = Luna.send_dice(groupxx, "🎲")
+            response = Luna.send_dice(group_id4, "🎲")
+            response2 = Luna.send_dice(group_id4, "🎲")
+            response3 = Luna.send_dice(group_id4, "🎲")
             tx = response.dice.value
             tx2 = response2.dice.value
             tx3 = response3.dice.value
@@ -399,10 +399,10 @@ def start_game(message, grid):
     ########################################################
     #result = [send_dice(group_id) for _ in range(3)]
     #total_score = sum(result)
-    fw = Luna.forward_messages(group_id, groupxx, response)
-    fw2 = Luna.forward_messages(group_id, groupxx, response2)
-    fw3 = Luna.forward_messages(group_id, groupxx, response3)
-    fw4 = Luna.forward_messages(channel_id, groupxx, [response, response2, response3])
+    fw = Luna.forward_messages(group_id, group_id4, response)
+    fw2 = Luna.forward_messages(group_id, group_id4, response2)
+    fw3 = Luna.forward_messages(group_id, group_id4, response3)
+    fw4 = Luna.forward_messages(channel_id, group_id4, [response, response2, response3])
     kq = f"➤KẾT QUẢ XX: {' + '.join(str(x) for x in result)} = {total_score} điểm {calculate_tai_xiu(total_score)}\n"
     kq1 = f"➤KẾT QUẢ XX: {' + '.join(str(x) for x in result)} = {total_score} điểm {calculate_tai_xiu(total_score)}\n"
     ls_cau(result)
