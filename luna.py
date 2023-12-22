@@ -399,7 +399,7 @@ def start_game(message, grid):
     ########################################################
     #result = [send_dice(group_id) for _ in range(3)]
     #total_score = sum(result)
-    Luna.forward_messages(chat_id=group_id, from_chat_id=group_id4, message_ids=response)
+    fw = Luna.forward_messages(chat_id=group_id, from_chat_id=group_id4, message_ids=response)
     Luna.forward_messages(chat_id=group_id, from_chat_id=group_id4, message_ids=response2)
     Luna.forward_messages(group_id, group_id4, response3)
     Luna.forward_messages(channel_id, group_id4, response)
