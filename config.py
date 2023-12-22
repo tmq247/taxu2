@@ -13,6 +13,7 @@ api_hash="2edbe92cfa9db035248bfc8957ba1b95"
 group_id = -1001712715936 #gr game
 group_id2 = -1002001597187 #lich su
 group_id3 = -1002078347006 # tong ket
+group_id4 = -1002066845150 #xx
 channel_id = -1002067584440 #soi cau
 tile_thang = 1.95
 admin_id = "6337933296" #coi
