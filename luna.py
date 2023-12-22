@@ -25,7 +25,7 @@ from pyrogram.enums import MessageEntityType
 #import telebot
 #from telebot.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
 #from telebot import TeleBot, types
-from config import bot_token, bot_token2, bot_token3, group_id, group_id2, group_id3, group_id4, admin_id, admin_id2, admin_id3, channel_id, admin, admin2
+from config import bot_token, bot_token2, bot_token3, group_id, group_id2, group_id3, group_id4, admin_id, admin_id2, admin_id3, channel_id, admin, admin2, xx_id
 
 is_config = os.path.exists("config.py")
 
@@ -371,20 +371,20 @@ def start_game(message, grid):
             response.delete()
             response2.delete()
             response3.delete()
-            response = Luna.send_dice(admin_id, "🎲")
-            response2 = Luna.send_dice(admin_id, "🎲")
-            response3 = Luna.send_dice(admin_id, "🎲")
+            response = Luna.send_dice(xx_id, "🎲")
+            response2 = Luna.send_dice(xx_id, "🎲")
+            response3 = Luna.send_dice(xx_id, "🎲")
             tx = response.dice.value
             tx2 = response2.dice.value
             tx3 = response3.dice.value
             result = [tx, tx2, tx3]
             total_score = sum(result)
-            fw = Luna.forward_messages(group_id, group_id4, response.id)
-            fw2 = Luna.forward_messages(group_id, group_id4, response2.id)
-            fw3 = Luna.forward_messages(group_id, group_id4, response3.id)
-            fw4 = Luna.forward_messages(channel_id, group_id4, response.id)
-            fw5 = Luna.forward_messages(channel_id, group_id4, response2.id)
-            fw6 = Luna.forward_messages(channel_id, group_id4, response3.id)
+            #fw = Luna.forward_messages(group_id, xx_id, response.id)
+            #fw2 = Luna.forward_messages(group_id, xx_id, response2.id)
+            #fw3 = Luna.forward_messages(group_id, xx_id, response3.id)
+            #Luna.forward_messages(channel_id, xx_id, response.id)
+            #Luna.forward_messages(channel_id, xx_id, response2.id)
+            #Luna.forward_messages(channel_id, xx_id, response3.id)
 
     elif len(chinhcau) != 0 and chinhcau[group_id]["cầu"] == 1:
         print("tài")
@@ -400,20 +400,14 @@ def start_game(message, grid):
             tx3 = response3.dice.value
             result = [tx, tx2, tx3]
             total_score = sum(result)
-            Luna.forward_messages(group_id, group_id4, response.id)
-            Luna.forward_messages(group_id, group_id4, response2.id)
-            Luna.forward_messages(group_id, group_id4, response3.id)
-            Luna.forward_messages(channel_id, group_id4, response.id)
-            Luna.forward_messages(channel_id, group_id4, response2.id)
-            Luna.forward_messages(channel_id, group_id4, response3.id)
 
-    else:
-        fw = Luna.forward_messages(group_id, admin_id, response.id)
-        fw2 = Luna.forward_messages(group_id, admin_id, response2.id)
-        fw3 = Luna.forward_messages(group_id, admin_id, response3.id)
-        fw4 = Luna.forward_messages(channel_id, admin_id, response.id)
-        fw5 = Luna.forward_messages(channel_id, admin_id, response2.id)
-        fw6 = Luna.forward_messages(channel_id, admin_id, response3.id)
+   
+    fw = Luna.forward_messages(group_id, xx_id, response.id)
+    fw2 = Luna.forward_messages(group_id, xx_id, response2.id)
+    fw3 = Luna.forward_messages(group_id, xx_id, response3.id)
+    Luna.forward_messages(channel_id, xx_id, response.id)
+    Luna.forward_messages(channel_id, xx_id, response2.id)
+    Luna.forward_messages(channel_id, xx_id, response3.id)
         
     chinhcau.clear()
     ########################################################
@@ -475,7 +469,7 @@ Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
     fw3.delete()
     time.sleep(7)
     mo_game.clear()
-    idtext4.delete()
+    text4.delete()
 
 @Luna.on_message(filters.command("diem"))
 async def check_balance(_, message: Message):
