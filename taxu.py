@@ -178,7 +178,8 @@ async def process_naptien_gitcode(user_id, gitcode, message):
         await bot.send_message(group_id3, f"""
 Người chơi {message.from_user.mention} 
 User: {user_id}
-Đã Nạp: {amount:,}đ bằng Giftcode.""")
+Đã Nạp: {amount:,}đ bằng Giftcode.
+Số điểm hiện có: {user_balance[user_id]}.""")
         await bot.send_message(group_id2, f"""
 Người chơi {message.from_user.mention} 
 User: {user_id}
