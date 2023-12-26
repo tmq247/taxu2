@@ -544,8 +544,8 @@ def soicau_taixiu(_, message: Message):
         ],]
     reply_markup = InlineKeyboardMarkup(soicau)
     with open("soicau.txt", "r", encoding='utf-8') as f:
-        lines = f.read().splitlines()[-1:-11:-1]
-        scau = f"10 lần cầu gần nhất:\n"
+        lines = f.read().splitlines()[-1:-16:-1]
+        scau = f"15 lần cầu gần nhất:\n"
         for line in lines:
             cau = line.strip().split()
             cau1 = cau[0]
