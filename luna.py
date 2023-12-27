@@ -120,7 +120,8 @@ load_balance_from_file()
 
 def get_user_info(user_id):
   try:
-    user = bot.get_chat(user_id)
+    user = Luna.get_chat(user_id)
+    user1 = Luna.get_users(user_id)
     return user
   except Exception as e:
     print("Error fetching user info:", e)
@@ -215,6 +216,7 @@ def handle_message(_, message: Message):
     #load_balance_from_file()
     chat_id = message.chat.id
     user_id = message.from_user.id
+    get_user_info()
     #user_id = Luna.get_users(from_user).id
     grid = chat_id
     print(bot_trangthai,1)
@@ -286,7 +288,7 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
                 
                 Luna.send_message(group_id, request_message)
                 Luna.send_message(group_id2, text)
-                #xx.send_message(user_id, request_message)
+                Luna.send_message(user_id, request_message)
                 save_balance_to_file()
                 load_balance_from_file()
             
@@ -459,7 +461,7 @@ def start_game(message, grid):
         kq1 += f"""{user_ids.mention} thắng {diem:,} điểm.Có {balance:,} điểm\n"""
         #kq1 += f"{user_id1} có {balance:,} điểm"
         #requests.get(f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={user_id}&text={kq1}")
-        #xx.send_message(user_id, kq)
+        Luna.send_message(user_id, kq)
         
     kq += f"""
 Tổng thắng: {total_win:,}đ
