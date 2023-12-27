@@ -286,7 +286,7 @@ def confirm_bet(user_id, bet_type, bet_amount, ten_ncuoc, message):
                 
                 Luna.send_message(group_id, request_message)
                 Luna.send_message(group_id2, text)
-                xx.send_message(user_id, request_message)
+                #xx.send_message(user_id, request_message)
                 save_balance_to_file()
                 load_balance_from_file()
             
@@ -459,7 +459,7 @@ def start_game(message, grid):
         kq1 += f"""{user_ids.mention} thắng {diem:,} điểm.Có {balance:,} điểm\n"""
         #kq1 += f"{user_id1} có {balance:,} điểm"
         #requests.get(f"https://api.telegram.org/bot{bot_token}/sendMessage?chat_id={user_id}&text={kq1}")
-        xx.send_message(user_id, kq)
+        #xx.send_message(user_id, kq)
         
     kq += f"""
 Tổng thắng: {total_win:,}đ
