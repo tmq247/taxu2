@@ -216,7 +216,8 @@ def handle_message(_, message: Message):
     #load_balance_from_file()
     chat_id = message.chat.id
     user_id = message.from_user.id
-    get_user_info()
+    user = Luna.get_users(user_id)
+    #get_user_info()
     #user_id = Luna.get_users(from_user).id
     grid = chat_id
     print(bot_trangthai,1)
