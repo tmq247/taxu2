@@ -482,6 +482,7 @@ Tổng thua: {total_bet_T + total_bet_X - total_win:,}đ
     time.sleep(7)
     mo_game.clear()
     text4.delete()
+    start_taixiu(_, message)
 
 @Luna.on_message(filters.command("diem"))
 async def check_balance(_, message: Message):
